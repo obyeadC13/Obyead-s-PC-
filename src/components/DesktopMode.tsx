@@ -5,6 +5,10 @@ import Starfield from './Starfield';
 import TelemetryWidget from './TelemetryWidget';
 import SpotifyWidget from './SpotifyWidget';
 import TerminalWidget from './TerminalWidget';
+import WeatherWidget from './WeatherWidget';
+import NotesWidget from './NotesWidget';
+import CalendarWidget from './CalendarWidget';
+import StatsWidget from './StatsWidget';
 import StartMenu from './StartMenu';
 import Taskbar from './Taskbar';
 import BrowserApp from './BrowserApp';
@@ -16,6 +20,7 @@ import CommentsApp from './CommentsApp';
 import AboutApp from './AboutApp';
 import FinderApp from './FinderApp';
 import SettingsApp from './SettingsApp';
+import MyWorkApp from './MyWorkApp';
 import bgImage from '../assets/phase4.png';
 
 interface WindowState {
@@ -29,30 +34,29 @@ interface WindowState {
   minimized: boolean;
 }
 
-interface DesktopFolder {
+interface DesktopIcon {
   id: string;
   name: string;
   icon: string;
   x: number;
   y: number;
-  subfolders?: { name: string; icon: string }[];
-  isFolder: boolean;
+  category: string;
 }
 
-const desktopFolders: DesktopFolder[] = [
-  {
-    id: 'my-work',
-    name: 'My Work',
-    icon: '📁',
-    x: 30,
-    y: 30,
-    subfolders: [
-      { name: 'Games', icon: '🎮' },
-      { name: 'Writing', icon: '✍️' },
-      { name: 'Dev', icon: '💻' },
-    ],
-    isFolder: true,
-  },
+const desktopIcons: DesktopIcon[] = [
+  { id: 'my-work', name: 'My Work', icon: '📁', x: 24, y: 24, category: 'mywork' },
+  { id: 'about', name: 'About Me', icon: '👤', x: 24, y: 112, category: 'about' },
+  { id: 'contact', name: 'Contact', icon: '✉️', x: 24, y: 200, category: 'contact' },
+  { id: 'games', name: 'Game Vault', icon: '🎮', x: 24, y: 288, category: 'games' },
+  { id: 'browser', name: 'Browser', icon: '🌐', x: 24, y: 376, category: 'browser' },
+  { id: 'manuscripts', name: 'Manuscripts', icon: '📝', x: 24, y: 464, category: 'manuscripts' },
+  { id: 'terminal', name: 'Terminal', icon: '⬛', x: 24, y: 552, category: 'terminal' },
+  { id: 'github', name: 'GitHub', icon: '⚡', x: 112, y: 24, category: 'browser' },
+  { id: 'linkedin', name: 'LinkedIn', icon: '💼', x: 112, y: 112, category: 'browser' },
+  { id: 'settings', name: 'Settings', icon: '⚙️', x: 112, y: 200, category: 'settings' },
+  { id: 'guestbook', name: 'Guestbook', icon: '💬', x: 112, y: 288, category: 'comments' },
+  { id: 'finder', name: 'Finder', icon: '🗂️', x: 112, y: 376, category: 'finder' },
+  { id: 'github2', name: 'Portfolio', icon: '🚀', x: 112, y: 464, category: 'about' },
 ];
 
 const appMeta: Record<string, { title: string; w: number; h: number }> = {
@@ -65,6 +69,7 @@ const appMeta: Record<string, { title: string; w: number; h: number }> = {
   about: { title: 'About', w: 400, h: 400 },
   finder: { title: 'Finder', w: 500, h: 380 },
   settings: { title: 'Settings', w: 440, h: 360 },
+  mywork: { title: 'My Work', w: 540, h: 420 },
 };
 
 export default function DesktopMode() {
@@ -73,8 +78,7 @@ export default function DesktopMode() {
   const [startOpen, setStartOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const [dragging, setDragging] = useState<{ id: string; startX: number; startY: number; origX: number; origY: number } | null>(null);
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
-  const [hoveredFolder, setHoveredFolder] = useState<string | null>(null);
+  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
@@ -108,10 +112,12 @@ export default function DesktopMode() {
   };
 
   const launchApp = (id: string) => {
+    if (id === 'trash') return;
     setWindows(prev => {
       const existing = prev.find(w => w.category === id);
       if (existing) {
         if (existing.minimized) return prev.map(w => w.id === existing.id ? { ...w, minimized: false } : w);
+        bringToFront(existing.id);
         return prev;
       }
       const meta = appMeta[id] || { title: id, w: 480, h: 400 };
@@ -151,6 +157,7 @@ export default function DesktopMode() {
       case 'about': return <AboutApp onClose={onClose} />;
       case 'finder': return <FinderApp onClose={onClose} onLaunch={launchApp} />;
       case 'settings': return <SettingsApp onClose={onClose} />;
+      case 'mywork': return <MyWorkApp onClose={onClose} onLaunch={launchApp} />;
       default: return null;
     }
   };
@@ -188,51 +195,37 @@ export default function DesktopMode() {
       <div className="absolute inset-0 z-[4] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
 
-      {/* Layer 3: Desktop Folders */}
+      {/* Layer 5: Desktop Icons */}
       <div className="absolute inset-0 z-[10] pointer-events-none">
-        {desktopFolders.map(folder => (
+        {desktopIcons.map(ic => (
           <div
-            key={folder.id}
-            className="absolute flex flex-col items-center pointer-events-auto"
-            style={{ left: folder.x, top: folder.y }}
-            onMouseEnter={() => setHoveredFolder(folder.id)}
-            onMouseLeave={() => setHoveredFolder(null)}
-            onDoubleClick={() => {
-              setExpandedFolders(prev => {
-                const next = new Set(prev);
-                next.has(folder.id) ? next.delete(folder.id) : next.add(folder.id);
-                return next;
-              });
-            }}
+            key={ic.id}
+            className="absolute flex flex-col items-center pointer-events-auto cursor-pointer"
+            style={{ left: ic.x, top: ic.y }}
+            onMouseEnter={() => setHoveredIcon(ic.id)}
+            onMouseLeave={() => setHoveredIcon(null)}
+            onDoubleClick={() => launchApp(ic.category)}
           >
-            {folder.isFolder && folder.subfolders && expandedFolders.has(folder.id) && (
-              <div className="absolute top-0 left-0 flex flex-col gap-1 animate-fadeIn" style={{ zIndex: 9999 }}>
-                {folder.subfolders.map(sub => (
-                  <div
-                    key={sub.name}
-                    className="w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-[rgba(10,10,26,0.8)] border border-neon-cyan/20 cursor-pointer hover:border-neon-cyan/50 hover:bg-[rgba(10,10,26,0.9)] transition-all"
-                    title={sub.name}
-                  >
-                    <span className="text-2xl">{sub.icon}</span>
-                    <span className="text-[10px] text-neon-cyan/80 mt-1 text-center">{sub.name}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className={`w-20 h-20 flex flex-col items-center justify-center rounded-lg cursor-pointer transition-all ${hoveredFolder === folder.id ? 'bg-[rgba(77,166,255,0.1)] border border-neon-cyan/40 scale-105' : 'border border-transparent'}`}>
-              <span className="text-4xl">{folder.icon}</span>
-              <span className="text-[11px] text-white mt-1 text-center drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]">{folder.name}</span>
+            <div className={`w-[68px] h-[68px] flex flex-col items-center justify-center rounded-lg transition-all ${hoveredIcon === ic.id ? 'bg-[rgba(77,166,255,0.15)] border border-neon-cyan/40 scale-105' : 'border border-transparent'}`}>
+              <span className="text-3xl">{ic.icon}</span>
+              <span className="text-[10px] text-white mt-1 text-center drop-shadow-[0_0_4px_rgba(0,0,0,0.9)] px-1 leading-tight">{ic.name}</span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Layer 3: Widgets */}
-      <TelemetryWidget />
-      <SpotifyWidget />
-      <TerminalWidget />
+      {/* Layer 6: Right Widgets */}
+      <div className="absolute top-10 right-4 z-[4] flex flex-col gap-4 hidden md:block w-56">
+        <TelemetryWidget />
+        <WeatherWidget />
+        <SpotifyWidget />
+        <CalendarWidget />
+        <StatsWidget />
+        <NotesWidget />
+        <TerminalWidget />
+      </div>
 
-      {/* Layer 4: Windows */}
+      {/* Layer 7: Windows */}
       <AnimatePresence>
         {windows.filter(w => !w.minimized).map(win => (
           <motion.div key={win.id}
@@ -275,10 +268,10 @@ export default function DesktopMode() {
         ))}
       </AnimatePresence>
 
-      {/* Layer 4: Start Menu */}
+      {/* Layer 8: Start Menu */}
       <StartMenu open={startOpen} onClose={() => setStartOpen(false)} onLaunch={launchApp} onSwitchTerminal={switchMode} />
 
-      {/* Layer 5: Taskbar */}
+      {/* Layer 9: Taskbar */}
       <Taskbar startOpen={startOpen} onToggleStart={() => setStartOpen(o => !o)} onLaunch={launchApp} openWindows={openWindowIds} time={time} />
     </div>
   );

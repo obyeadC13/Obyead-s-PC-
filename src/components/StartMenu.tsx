@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Globe, Gamepad2, BookText, Folder, Mail, MessageSquare, User } from 'lucide-react';
+import { Terminal, Globe, Gamepad2, BookText, Folder, Mail, MessageSquare, User, FolderOpen } from 'lucide-react';
 
 interface App {
   id: string;
@@ -8,7 +8,8 @@ interface App {
 }
 
 const apps: App[] = [
-  { id: 'browser', icon: <Globe size={16} />, label: 'X+ Browser' },
+  { id: 'mywork', icon: <FolderOpen size={16} />, label: 'My Work' },
+  { id: 'browser', icon: <Globe size={16} />, label: 'Browser' },
   { id: 'games', icon: <Gamepad2 size={16} />, label: 'Game Vault' },
   { id: 'manuscripts', icon: <BookText size={16} />, label: 'Manuscripts' },
   { id: 'terminal', icon: <Terminal size={16} />, label: 'Terminal' },
