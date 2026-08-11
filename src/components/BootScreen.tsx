@@ -1,31 +1,56 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const BOOT_ASCII = `
-=                                      
-                :@.               :.                    
-                .@:       =+:    :%+                    
-                 @=        ##   .%%                    
-                .@+        -#@ .##                      
-              -:+@*:        +@@#@-                      
-            .%@@@@@@@@@      @@@=                       
-              +*#@@%#@@.     @@@+                       
-                -@+ +@#     %@+##+                      
-                .@*  %     @@*  %%-                     
-                .@-       @@@.   %=                    
-                .%        @@*     :                     
-                 .   =:   %@                            
-                    .@%    +                            
-                                              
-                                              
-                      *                                
-                     .*   -%                          
-                          +@                          
+const BOOT_ART_LINES = [
+"uuuuuuuuuuuuuuuuuuuuu.",
+"                   .u$$$$$$$$$$$$$$$$$$$$$$$$$$W.",
+"                 u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Wu.",
+"               $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i",
+"              $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"         '    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"           .i$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i",
+"           $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$W",
+"          .$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$W",
+"         .$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i",
+"         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$.",
+"         W$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$u       #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$~",
+"$#      '\"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$i        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$        #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"$$         $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"#$$.        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#",
+" $$      $iW$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$!",
+" $$i      $$$$$$$#\"\" '\"#\"#$$$$$$$$$$$$$$$$$#\"\"\"\"\"\"#$$$$$$$$$$$$$$$W",
+" #$$W    '$$$#\"            \"       !$$$$'           '\"#$$$$$$$$$$#",
+"  $$$     ''                 ! !iuW$$$$$                 #$$$$$$$#",
+"  #$$    $u                  $   $$$$$$$                  $$$$$$$~",
+"   \"#    #$$i.               #   $$$$$$$.                 '$$$$$",
+"          $$$$$i.                \"\"\"#$$$$i.               .$$$$#",
+"          $$$$$$$$!         .   '    $$$$$$$$$i           $$$$$",
+"          '$$$$  $iWW   .uW'        #$$$$$$$$$W.       .$$$$$$#",
+"            \"#$$$$$$$$$$$$#'          $$$$$$$$$$$iWiuuuW$$$$$$$$W",
+"               !#\"\"    \"\"             '$$$$$$##$$$$$$$$$$$$$$$$",
+"          i$$$$    .                   !$$$$$$ .$$$$$$$$$$$$$$$#",
+"         $$$$$$$$$$'                    $$$$$$$$$Wi$$$$$$#\"#$'$",
+"         #$$$$$$$$$W.                   $$$$$$$$$$$#   ''",
+"          '$$$$##$$$$!       i$u.  $. .i$$$$$$$$$#\"\"",
+"             \"     '#W       $$$$$$$$$$$$$$$$$$$'      u$#",
+"                            W$$$$$$$$$$$$$$$$$$      $$$$W",
+"                            $$'!$$$##$$$$''$$$$      $$$$!",
+"                           i$\" $$$$  $$#'  ''\"\"     W$$$$",
+"                                                   W$$$$!",
+"                      uW$$  uu  uu.  $$$  $$$Wu#   $$$$$$",
+"                     ~$$$$iu$$iu$$$uW$$! $$$$$$i .W$$$$$$",
+"             ..  !   \"#$$$$$$$$$$##$$$$$$$$$$$$$$$$$$$$#\"",
+"             $$W  $     \"#$$$$$$$iW$$$$$$$$$$$$$$$$$$$$$W",
+"             $#'   '       \"\"#$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+"                              !$$$$$$$$$$$$$$$$$$$$$#'",
+"                              $$$$$$$$$$$$$$$$$$$$$$!",
+"                            $$$$$$$$$$$$$$$$$$$$$$$'",
+"                             $$$$$$$$$$$$$$$$$$$$\"",];
 
-                           :.                         
-                   %#+  .%@=                          
-                   -+:
-`;
+const BOOT_ASCII = BOOT_ART_LINES.join('\n');
 
 const BOOT_LINES = [
   "[BIOS] Megarooms v3.2.1 ... OK",
@@ -49,7 +74,7 @@ export default function BootScreen() {
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     const asciiTimer = setTimeout(() => {
-      setLines(BOOT_ASCII.split('\n'));
+      setLines(BOOT_ART_LINES);
       setAsciiDone(true);
     }, 200);
     timers.push(asciiTimer);
@@ -88,7 +113,7 @@ export default function BootScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-term-bg text-term-green font-mono flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-term-bg text-term-green font-mono flex flex-col items-center justify-start pt-12 p-4 relative overflow-hidden">
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none z-10 opacity-[0.03]"
         style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)' }} />
@@ -100,17 +125,20 @@ export default function BootScreen() {
           backgroundSize: '40px 40px'
         }} />
 
-      <div className="w-full max-w-2xl relative z-20">
-        {/* ASCII Logo */}
-        {asciiDone && lines.length > BOOT_ASCII.split('\n').length && (
-          <pre className="text-[8px] sm:text-[10px] leading-[10px] sm:leading-[12px] text-neon-cyan mb-4 select-none"
-            style={{ textShadow: '0 0 8px #00f0ff66, 0 0 20px #00f0ff33' }}>
+      {/* ASCII Art - centered and up top */}
+      <div className="w-full flex justify-center relative z-20" style={{ marginTop: '40px' }}>
+        {asciiDone && (
+          <pre className="text-[5px] sm:text-[6px] leading-[5px] sm:leading-[6px] text-neon-cyan select-none whitespace-pre"
+            style={{ textShadow: '0 0 8px #00f0ff66, 0 0 20px #00f0ff33', flexShrink: 0, overflow: 'visible' }}>
             {BOOT_ASCII}
           </pre>
         )}
+      </div>
 
+      {/* Boot lines below the art */}
+      <div className="w-full max-w-2xl mt-6 relative z-20">
         <div className="mb-6 text-sm">
-          {lines.slice(asciiDone ? BOOT_ASCII.split('\n').length : 0).map((line, i) => (
+          {lines.slice(asciiDone ? BOOT_ART_LINES.length : 0).map((line, i) => (
             <div key={i} className="animate-boot" style={{ animationDelay: `${i * 0.05}s` }}>
               {line.startsWith('>') ? (
                 <span className="text-neon-cyan font-bold" style={{ textShadow: '0 0 10px #00f0ff88' }}>

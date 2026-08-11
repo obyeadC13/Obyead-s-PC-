@@ -29,6 +29,32 @@ interface WindowState {
   minimized: boolean;
 }
 
+interface DesktopFolder {
+  id: string;
+  name: string;
+  icon: string;
+  x: number;
+  y: number;
+  subfolders?: { name: string; icon: string }[];
+  isFolder: boolean;
+}
+
+const desktopFolders: DesktopFolder[] = [
+  {
+    id: 'my-work',
+    name: 'My Work',
+    icon: '📁',
+    x: 30,
+    y: 30,
+    subfolders: [
+      { name: 'Games', icon: '🎮' },
+      { name: 'Writing', icon: '✍️' },
+      { name: 'Dev', icon: '💻' },
+    ],
+    isFolder: true,
+  },
+];
+
 const appMeta: Record<string, { title: string; w: number; h: number }> = {
   browser: { title: 'Browser', w: 640, h: 460 },
   games: { title: 'Game Vault', w: 480, h: 420 },
@@ -47,6 +73,8 @@ export default function DesktopMode() {
   const [startOpen, setStartOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const [dragging, setDragging] = useState<{ id: string; startX: number; startY: number; origX: number; origY: number } | null>(null);
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+  const [hoveredFolder, setHoveredFolder] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
@@ -133,7 +161,6 @@ export default function DesktopMode() {
     <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a1a' }}>
       {/* Layer 0: Background Image */}
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 z-[1] bg-[#0a0a1a]/70" />
 
       {/* Layer 0.5: Cyberpunk grid */}
       <div className="absolute inset-0 z-[1] pointer-events-none opacity-[0.04]"
@@ -160,6 +187,45 @@ export default function DesktopMode() {
       {/* Vignette */}
       <div className="absolute inset-0 z-[4] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
+
+      {/* Layer 3: Desktop Folders */}
+      <div className="absolute inset-0 z-[10] pointer-events-none">
+        {desktopFolders.map(folder => (
+          <div
+            key={folder.id}
+            className="absolute flex flex-col items-center pointer-events-auto"
+            style={{ left: folder.x, top: folder.y }}
+            onMouseEnter={() => setHoveredFolder(folder.id)}
+            onMouseLeave={() => setHoveredFolder(null)}
+            onDoubleClick={() => {
+              setExpandedFolders(prev => {
+                const next = new Set(prev);
+                next.has(folder.id) ? next.delete(folder.id) : next.add(folder.id);
+                return next;
+              });
+            }}
+          >
+            {folder.isFolder && folder.subfolders && expandedFolders.has(folder.id) && (
+              <div className="absolute top-0 left-0 flex flex-col gap-1 animate-fadeIn" style={{ zIndex: 9999 }}>
+                {folder.subfolders.map(sub => (
+                  <div
+                    key={sub.name}
+                    className="w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-[rgba(10,10,26,0.8)] border border-neon-cyan/20 cursor-pointer hover:border-neon-cyan/50 hover:bg-[rgba(10,10,26,0.9)] transition-all"
+                    title={sub.name}
+                  >
+                    <span className="text-2xl">{sub.icon}</span>
+                    <span className="text-[10px] text-neon-cyan/80 mt-1 text-center">{sub.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className={`w-20 h-20 flex flex-col items-center justify-center rounded-lg cursor-pointer transition-all ${hoveredFolder === folder.id ? 'bg-[rgba(77,166,255,0.1)] border border-neon-cyan/40 scale-105' : 'border border-transparent'}`}>
+              <span className="text-4xl">{folder.icon}</span>
+              <span className="text-[11px] text-white mt-1 text-center drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]">{folder.name}</span>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* Layer 3: Widgets */}
       <TelemetryWidget />
