@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black: #000000;
+  --color-charcoal: #080305;
+  --color-blood: #dc2626;
+  --color-crimson: #ff0033;
+  --color-dark-red: #7f1d1d;
+  --color-glass-red: rgba(127, 29, 29, 0.8);
+
+  --color-neon-cyan: #4da6ff;
+  --color-term-bg: #0a0a1a;
+  --color-term-green: #4da6ff;
+  --color-term-dim: #2a4a7a;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-mono: 'Share Tech Mono', 'Fira Code', monospace;
+
+  --animate-fadeIn: fadeIn 0.2s ease-out;
+  --animate-scaleIn: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-slideUp: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-bounce: bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-equalizer: equalizer 0.6s ease-in-out infinite alternate;
+  --animate-loading: loading 1.5s ease-in-out infinite;
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+    50% { transform: translateY(-2px); }
+    70% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes equalizer { 0% { height: 3px; } 100% { height: 12px; } }
+  @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  overflow: hidden;
+  background: #000;
+  color: #e5e7eb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(220, 38, 38, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(220, 38, 38, 0.4); }
+
+input::placeholder, textarea::placeholder { color: #6b2131; }
