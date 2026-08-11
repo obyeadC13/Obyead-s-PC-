@@ -2,13 +2,29 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BOOT_ASCII = `
-   ╔══════════════════════════════════════════╗
-   ║   ___  _____   ___       __    ____      ║
-   ║  / _ \\/__  /  / _ \\___  / /   /  _/ ___  ║
-   ║ / , _/ / / / / , _/ -_)/ /   / /  (_-<  ║
-   ║ /_/|_| /_/ |_|/_/|_|__/ /_/  /___//___/  ║
-   ║         SYSTEM v4.2.1                    ║
-   ╚══════════════════════════════════════════╝
+=                                      
+                :@.               :.                    
+                .@:       =+:    :%+                    
+                 @=        ##   .%%                    
+                .@+        -#@ .##                      
+              -:+@*:        +@@#@-                      
+            .%@@@@@@@@@      @@@=                       
+              +*#@@%#@@.     @@@+                       
+                -@+ +@#     %@+##+                      
+                .@*  %     @@*  %%-                     
+                .@-       @@@.   %=                    
+                .%        @@*     :                     
+                 .   =:   %@                            
+                    .@%    +                            
+                                              
+                                              
+                      *                                
+                     .*   -%                          
+                          +@                          
+
+                           :.                         
+                   %#+  .%@=                          
+                   -+:
 `;
 
 const BOOT_LINES = [
@@ -87,7 +103,7 @@ export default function BootScreen() {
       <div className="w-full max-w-2xl relative z-20">
         {/* ASCII Logo */}
         {asciiDone && lines.length > BOOT_ASCII.split('\n').length && (
-          <pre className="text-[8px] sm:text-[10px] leading-[11px] sm:leading-[13px] text-neon-cyan mb-4 select-none"
+          <pre className="text-[8px] sm:text-[10px] leading-[10px] sm:leading-[12px] text-neon-cyan mb-4 select-none"
             style={{ textShadow: '0 0 8px #00f0ff66, 0 0 20px #00f0ff33' }}>
             {BOOT_ASCII}
           </pre>
