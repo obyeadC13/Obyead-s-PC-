@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface WindowState {
   id: string;
@@ -33,12 +33,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [focusedWindow, setFocusedWindow] = useState<string | null>(null);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
 
+  // Sync mode state with URL
+  useEffect(() => {
+    if (location.pathname.includes('/gui')) setModeState('gui');
+    else if (location.pathname.includes('/terminal')) setModeState('terminal');
+  }, [location.pathname]);
+
   const setMode = useCallback((newMode: 'terminal' | 'gui') => {
     setModeState(newMode);
     if (newMode === 'terminal') {
-      navigate('/terminal');
+      navigate('/boot/terminal');
     } else {
-      navigate('/gui');
+      navigate('/boot/gui');
     }
   }, [navigate]);
 

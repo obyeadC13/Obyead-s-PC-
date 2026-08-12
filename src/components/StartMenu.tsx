@@ -1,27 +1,22 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Globe, Gamepad2, BookText, Folder, Mail, MessageSquare, User, FolderOpen } from 'lucide-react';
+import { Terminal, Globe, Gamepad2, BookText, Mail, MessageSquare, User, FolderOpen, Github, Linkedin, Instagram, Monitor } from 'lucide-react';
 
-interface App {
-  id: string;
-  icon: React.ReactNode;
-  label: string;
-}
-
-const apps: App[] = [
-  { id: 'mywork', icon: <FolderOpen size={16} />, label: 'My Work' },
-  { id: 'browser', icon: <Globe size={16} />, label: 'Browser' },
-  { id: 'games', icon: <Gamepad2 size={16} />, label: 'Game Vault' },
-  { id: 'manuscripts', icon: <BookText size={16} />, label: 'Manuscripts' },
-  { id: 'terminal', icon: <Terminal size={16} />, label: 'Terminal' },
-  { id: 'contact', icon: <Mail size={16} />, label: 'Contact' },
-  { id: 'comments', icon: <MessageSquare size={16} />, label: 'Guestbook' },
-  { id: 'about', icon: <User size={16} />, label: 'About' },
+const apps = [
+  { id: 'mywork', icon: FolderOpen, label: 'My Work' },
+  { id: 'about', icon: User, label: 'About Me' },
+  { id: 'browser', icon: Globe, label: 'Browser' },
+  { id: 'games', icon: Gamepad2, label: 'Game Vault' },
+  { id: 'manuscripts', icon: BookText, label: 'Manuscripts' },
+  { id: 'terminal', icon: Terminal, label: 'Terminal' },
+  { id: 'contact', icon: Mail, label: 'Contact' },
+  { id: 'guestbook', icon: MessageSquare, label: 'Guestbook' },
+  { id: 'finder', icon: FolderOpen, label: 'Finder' },
 ];
 
 const socials = [
-  { id: 'linkedin', label: 'LinkedIn', icon: <Folder size={14} /> },
-  { id: 'github', label: 'GitHub', icon: <Folder size={14} /> },
-  { id: 'instagram', label: 'Instagram', icon: <Folder size={14} /> },
+  { id: 'github', icon: Github, label: 'GitHub', url: 'https://github.com' },
+  { id: 'linkedin', icon: Linkedin, label: 'LinkedIn', url: 'https://linkedin.com' },
+  { id: 'instagram', icon: Instagram, label: 'Instagram', url: 'https://instagram.com' },
 ];
 
 export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }: {
@@ -42,52 +37,75 @@ export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }:
             className="fixed inset-0 z-[499]"
           />
           <motion.div
-            initial={{ opacity: 0, y: 12, scale: 0.96 }}
+            initial={{ opacity: 0, y: 10, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.96 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="fixed bottom-12 left-2 z-[500] w-72"
+            exit={{ opacity: 0, y: 10, scale: 0.97 }}
+            transition={{ duration: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
+            className="fixed bottom-14 left-2 z-[500] w-64"
           >
-            <div className="rounded-xl backdrop-blur-xl bg-black/85 border border-red-900/40 overflow-hidden shadow-[0_0_60px_rgba(220,38,38,0.1)]">
-              {/* Header */}
-              <div className="px-4 py-3 border-b border-red-900/20 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blood to-red-950 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">O</span>
+            <div
+              className="rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+              style={{
+                background: 'rgba(10, 10, 26, 0.85)',
+                backdropFilter: 'blur(40px) saturate(1.6)',
+                border: '1px solid rgba(220,38,38,0.2)',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(220,38,38,0.08), inset 0 1px 0 rgba(255,255,255,0.03)',
+              }}
+            >
+              <div className="px-4 py-3 flex items-center gap-3" style={{ borderBottom: '1px solid rgba(220,38,38,0.1)' }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(220,38,38,0.6), rgba(220,38,38,0.2))' }}>
+                  <span className="text-xs font-bold text-white">OB</span>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold text-gray-200">Obyead's PC</p>
-                  <p className="text-[10px] text-red-500/60">System Operator</p>
+                <div className="flex-1">
+                  <p className="text-xs font-medium text-gray-200">obyead</p>
+                  <p className="text-[9px] text-gray-500">System Operator</p>
                 </div>
               </div>
 
-              {/* Apps */}
-              <div className="p-2">
-                {apps.map(app => (
-                  <button key={app.id} onClick={() => { onLaunch(app.id); onClose(); }}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-red-950/30 transition-colors group">
-                    <span className="text-red-500/70 group-hover:text-blood transition-colors">{app.icon}</span>
-                    <span className="text-xs text-gray-400 group-hover:text-gray-200 transition-colors">{app.label}</span>
-                  </button>
-                ))}
+              <div className="p-1.5">
+                {apps.map((app) => {
+                  const Icon = app.icon;
+                  return (
+                    <button
+                      key={app.id}
+                      onClick={() => { onLaunch(app.id); onClose(); }}
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all group"
+                    >
+                      <span className="text-gray-500 group-hover:text-blood transition-colors">
+                        <Icon size={16} />
+                      </span>
+                      <span className="text-xs text-gray-400 group-hover:text-gray-200 transition-colors">{app.label}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Socials */}
-              <div className="px-2 pb-2 pt-1 border-t border-red-900/20">
-                <p className="px-3 pb-1 text-[9px] uppercase tracking-widest text-gray-600">Connect</p>
-                {socials.map(s => (
-                  <button key={s.id} onClick={() => { onClose(); }}
-                    className="w-full flex items-center gap-3 px-3 py-1.5 rounded-lg text-left hover:bg-red-950/20 transition-colors group">
-                    <span className="text-gray-600 group-hover:text-red-400 transition-colors">{s.icon}</span>
-                    <span className="text-[11px] text-gray-500 group-hover:text-gray-300 transition-colors">{s.label}</span>
-                  </button>
-                ))}
+              <div className="px-3 py-1.5 border-t border-red-900/10">
+                <p className="text-[9px] uppercase tracking-widest text-gray-600 mb-1.5">Links</p>
+                {socials.map((s) => {
+                  const Icon = s.icon;
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => { onClose(); window.open(s.url, '_blank'); }}
+                      className="w-full flex items-center gap-3 px-2 py-1.5 rounded-lg text-left transition-all group"
+                    >
+                      <span className="text-gray-600 group-hover:text-gray-400 transition-colors">
+                        <Icon size={14} />
+                      </span>
+                      <span className="text-[11px] text-gray-500 group-hover:text-gray-300 transition-colors">{s.label}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Footer */}
-              <div className="px-4 py-2 border-t border-red-900/20 flex justify-end">
-                <button onClick={onSwitchTerminal} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-300 hover:bg-red-950/20 transition-colors">
-                  <Terminal size={12} />
-                  <span>Switch to Terminal</span>
+              <div className="px-3 py-2 border-t border-red-900/10 flex items-center justify-between">
+                <button
+                  onClick={onSwitchTerminal}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-blood hover:bg-red-950/20 transition-all"
+                >
+                  <Monitor size={13} />
+                  <span>Terminal Mode</span>
                 </button>
               </div>
             </div>

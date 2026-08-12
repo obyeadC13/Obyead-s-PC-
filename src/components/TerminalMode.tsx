@@ -4,6 +4,7 @@ import { aboutMe } from '../data/projects';
 import { projects } from '../data/projects';
 import AsteroidGame from './AsteroidGame';
 import SpaceBackground from './SpaceBackground';
+import GlitchOverlay from './GlitchOverlay';
 
 const WELCOME_ART = `.                                                                                                                   
                                                                 +-                                                                                                                  
@@ -210,6 +211,7 @@ export default function TerminalMode() {
         <AsteroidGame onExit={() => setPlayingGame(false)} />
       ) : (
         <>
+          <GlitchOverlay />
           <SpaceBackground />
           <div className="relative z-10 flex flex-col h-screen w-screen">
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4">

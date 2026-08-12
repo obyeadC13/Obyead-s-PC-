@@ -109,7 +109,7 @@ export default function BootScreen() {
   }, []);
 
   const handleBoot = (mode: 'terminal' | 'gui') => {
-    navigate(`/${mode}`);
+    navigate(`/boot/${mode}`);
   };
 
   return (
