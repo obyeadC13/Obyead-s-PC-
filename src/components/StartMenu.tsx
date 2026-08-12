@@ -5,6 +5,7 @@ const apps = [
   { id: 'projects', icon: '📁', label: 'Projects' },
   { id: 'about', icon: '👤', label: 'About Me' },
   { id: 'skills', icon: '⚡', label: 'Skills' },
+  { id: 'experience', icon: '💼', label: 'Experience' },
   { id: 'terminal', icon: '⬛', label: 'Terminal' },
   { id: 'resume', icon: '📄', label: 'Resume' },
   { id: 'contact', icon: '✉️', label: 'Contact' },

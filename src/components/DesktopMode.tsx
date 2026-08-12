@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import GlitchOverlay from './GlitchOverlay';
 import Starfield from './Starfield';
 import CyberAtmosphere from './CyberAtmosphere';
+import AnimatedBackground from './AnimatedBackground';
 import StartMenu from './StartMenu';
 import Taskbar from './Taskbar';
 import AppWindow from './AppWindow';
 import ProjectsApp from './ProjectsApp';
 import AboutApp from './AboutApp';
 import SkillsApp from './SkillsApp';
+import ExperienceApp from './ExperienceApp';
 import TerminalApp from './TerminalApp';
 import ContactApp from './ContactApp';
 import ResumeApp from './ResumeApp';
@@ -21,19 +23,20 @@ const desktopIcons = [
   { id: 'projects', name: 'Projects', icon: '📁' },
   { id: 'about', name: 'About', icon: '👤' },
   { id: 'skills', name: 'Skills', icon: '⚡' },
+  { id: 'experience', name: 'Experience', icon: '💼' },
   { id: 'terminal', name: 'Terminal', icon: '⬛' },
   { id: 'resume', name: 'Resume.pdf', icon: '📄' },
   { id: 'contact', name: 'Contact', icon: '✉️' },
-  { id: 'trash', name: 'Trash', icon: '🗑️' },
 ];
 
 const appMeta: Record<string, { title: string; icon: string; w: number; h: number }> = {
-  projects: { title: 'My Projects', icon: '📁', w: 800, h: 580 },
-  about: { title: 'About Me', icon: '👤', w: 520, h: 500 },
-  skills: { title: 'Skills', icon: '⚡', w: 540, h: 500 },
+  projects: { title: 'Selected Work', icon: '📁', w: 820, h: 580 },
+  about: { title: 'About Me', icon: '👤', w: 560, h: 540 },
+  skills: { title: 'Skills', icon: '⚡', w: 560, h: 520 },
+  experience: { title: 'Experience', icon: '💼', w: 600, h: 520 },
   terminal: { title: 'Terminal', icon: '⬛', w: 640, h: 440 },
   resume: { title: 'Resume.pdf', icon: '📄', w: 660, h: 540 },
-  contact: { title: 'Contact', icon: '✉️', w: 500, h: 500 },
+  contact: { title: 'Contact', icon: '✉️', w: 540, h: 560 },
   browser: { title: 'Browser', icon: '🌐', w: 700, h: 480 },
   settings: { title: 'Settings', icon: '⚙️', w: 500, h: 400 },
 };
@@ -65,6 +68,7 @@ export default function DesktopMode() {
       case 'projects': return <ProjectsApp onClose={close} />;
       case 'about': return <AboutApp onClose={close} />;
       case 'skills': return <SkillsApp onClose={close} />;
+      case 'experience': return <ExperienceApp onClose={close} />;
       case 'terminal': return <TerminalApp onClose={close} onLaunch={launch} />;
       case 'resume': return <ResumeApp onClose={close} />;
       case 'contact': return <ContactApp onClose={close} />;
@@ -84,6 +88,7 @@ export default function DesktopMode() {
       <div className="absolute inset-0 z-[1]" style={{ background: 'radial-gradient(ellipse at 70% 30%, rgba(127,29,29,0.05) 0%, transparent 50%)' }} />
       <div className="absolute inset-0 z-[2] pointer-events-none opacity-[0.04]"
         style={{ backgroundImage: 'linear-gradient(rgba(220,38,38,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(220,38,38,0.6) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+      <div className="absolute inset-0 z-[1]"><AnimatedBackground /></div>
       <div className="absolute inset-0 z-[3]"><Starfield /></div>
       <div className="absolute inset-0 z-[4]"><CyberAtmosphere /></div>
       <div className="absolute inset-0 z-[5] pointer-events-none opacity-[0.015]"
