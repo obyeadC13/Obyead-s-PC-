@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Globe, Gamepad2, BookText, Mail, MessageSquare, User, FolderOpen, Github, Linkedin, Instagram, Monitor } from 'lucide-react';
+import { Terminal, Globe, Gamepad2, BookText, Mail, MessageSquare, User, FolderOpen, Monitor } from 'lucide-react';
 
 const apps = [
   { id: 'mywork', icon: FolderOpen, label: 'My Work' },
@@ -14,9 +14,9 @@ const apps = [
 ];
 
 const socials = [
-  { id: 'github', icon: Github, label: 'GitHub', url: 'https://github.com' },
-  { id: 'linkedin', icon: Linkedin, label: 'LinkedIn', url: 'https://linkedin.com' },
-  { id: 'instagram', icon: Instagram, label: 'Instagram', url: 'https://instagram.com' },
+  { id: 'github', label: 'GitHub', url: 'https://github.com' },
+  { id: 'linkedin', label: 'LinkedIn', url: 'https://linkedin.com' },
+  { id: 'instagram', label: 'Instagram', url: 'https://instagram.com' },
 ];
 
 export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }: {
@@ -82,21 +82,20 @@ export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }:
 
               <div className="px-3 py-1.5 border-t border-red-900/10">
                 <p className="text-[9px] uppercase tracking-widest text-gray-600 mb-1.5">Links</p>
-                {socials.map((s) => {
-                  const Icon = s.icon;
-                  return (
-                    <button
-                      key={s.id}
-                      onClick={() => { onClose(); window.open(s.url, '_blank'); }}
-                      className="w-full flex items-center gap-3 px-2 py-1.5 rounded-lg text-left transition-all group"
-                    >
-                      <span className="text-gray-600 group-hover:text-gray-400 transition-colors">
-                        <Icon size={14} />
-                      </span>
-                      <span className="text-[11px] text-gray-500 group-hover:text-gray-300 transition-colors">{s.label}</span>
-                    </button>
-                  );
-                })}
+{socials.map((s) => {
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => { onClose(); window.open(s.url, '_blank'); }}
+                        className="w-full flex items-center gap-3 px-2 py-1.5 rounded-lg text-left transition-all group"
+                      >
+                        <span className="text-gray-600 group-hover:text-gray-400 transition-colors">
+                          <FolderOpen size={14} />
+                        </span>
+                        <span className="text-[11px] text-gray-500 group-hover:text-gray-300 transition-colors">{s.label}</span>
+                      </button>
+                    );
+                  })}
               </div>
 
               <div className="px-3 py-2 border-t border-red-900/10 flex items-center justify-between">

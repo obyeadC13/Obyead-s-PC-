@@ -16,7 +16,6 @@ const SERVICES = [
 
 export default function GuiBoot() {
   const navigate = useNavigate();
-  const [lineIndex, setLineIndex] = useState(0);
   const [servicesDone, setServicesDone] = useState(0);
   const [phase, setPhase] = useState<'loading' | 'glitch' | 'done'>('loading');
   const [progress, setProgress] = useState(0);
@@ -34,7 +33,6 @@ export default function GuiBoot() {
     timers.push(t2);
 
     let delay = 1200;
-    const serviceTimers: number[] = [];
     SERVICES.forEach((_, i) => {
       const st = setTimeout(() => {
         setServicesDone(i + 1);

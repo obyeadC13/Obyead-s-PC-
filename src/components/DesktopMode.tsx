@@ -206,7 +206,7 @@ export default function DesktopMode() {
       case 'about': return <AboutApp onClose={onClose} />;
       case 'finder': return <FinderApp onClose={onClose} onLaunch={launchApp} />;
       case 'settings': return <SettingsApp onClose={onClose} />;
-      case 'mywork': return <MyWorkApp onClose={onClose} onLaunch={launchApp} />;
+      case 'mywork': return <MyWorkApp onClose={onClose} />;
       default: return null;
     }
   };

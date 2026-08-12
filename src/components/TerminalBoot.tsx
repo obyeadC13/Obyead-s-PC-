@@ -51,7 +51,7 @@ export default function TerminalBoot() {
     const timers: ReturnType<typeof setTimeout>[] = [];
     let delay = 300;
 
-    BOOT_LINES.forEach((line, i) => {
+    BOOT_LINES.forEach((line, _i) => {
       const t = setTimeout(() => {
         setLines(prev => [...prev, line.text]);
       }, delay);

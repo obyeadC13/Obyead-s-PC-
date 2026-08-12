@@ -2,7 +2,7 @@ import { Cpu, HardDrive, Network } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function StatsWidget() {
-  const [disk, setDisk] = useState(58);
+  const [disk] = useState(58);
   const [net, setNet] = useState(34);
 
   useEffect(() => {

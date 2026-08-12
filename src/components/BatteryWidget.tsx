@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 export default function BatteryWidget() {
   const [level, setLevel] = useState(87);
-  const [charging, setCharging] = useState(true);
+  const charging = true;
 
   useEffect(() => {
     const s = setInterval(() => {

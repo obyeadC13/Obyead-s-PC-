@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Gamepad2, BookOpen, Code, ChevronRight, Globe, ExternalLink } from 'lucide-react';
+import { X, Gamepad2, BookOpen, Code, ChevronRight, Globe } from 'lucide-react';
 
 interface ProjectItem {
   name: string;
@@ -45,7 +45,7 @@ const folderData: Record<string, FolderData> = {
   },
 };
 
-export default function MyWorkApp({ onClose, onLaunch }: { onClose: () => void; onLaunch: (id: string) => void }) {
+export default function MyWorkApp({ onClose }: { onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<string>('games');
   const current = folderData[activeTab] || folderData.games;
 
