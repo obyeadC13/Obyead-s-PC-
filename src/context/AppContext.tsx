@@ -1,117 +1,142 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, type ReactNode, type Dispatch, type SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface WindowState {
+export interface WindowState {
   id: string;
+  appId: string;
   title: string;
   icon: string;
-  category: 'web' | 'games' | 'writing' | 'about' | 'contact' | 'comments';
+  x: number;
+  y: number;
+  w: number;
+  h: number;
   minimized: boolean;
-  position: { x: number; y: number };
+  maximized: boolean;
+  preMaxRect: { x: number; y: number; w: number; h: number };
 }
 
-interface AppContextType {
-  mode: 'terminal' | 'gui';
-  setMode: (mode: 'terminal' | 'gui') => void;
+export interface Toast {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
+interface AppCtx {
   windows: WindowState[];
-  focusedWindow: string | null;
-  openWindow: (category: WindowState['category'], title: string, icon: string) => void;
+  setWindows: Dispatch<SetStateAction<WindowState[]>>;
+  focusedId: string | null;
+  startMenuOpen: boolean;
+  setStartMenuOpen: Dispatch<SetStateAction<boolean>>;
+  toasts: Toast[];
+  showToast: (message: string, type?: Toast['type']) => void;
+  removeToast: (id: string) => void;
+  openApp: (appId: string, extra?: { title?: string; icon?: string; w?: number; h?: number }) => void;
   closeWindow: (id: string) => void;
   minimizeWindow: (id: string) => void;
+  maximizeWindow: (id: string) => void;
+  restoreWindow: (id: string) => void;
   focusWindow: (id: string) => void;
-  startMenuOpen: boolean;
-  setStartMenuOpen: (open: boolean) => void;
   switchMode: () => void;
 }
 
-const AppContext = createContext<AppContextType | null>(null);
+const Ctx = createContext<AppCtx | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
-  const [mode, setModeState] = useState<'terminal' | 'gui'>('terminal');
   const [windows, setWindows] = useState<WindowState[]>([]);
-  const [focusedWindow, setFocusedWindow] = useState<string | null>(null);
+  const [focusedId, setFocused] = useState<string | null>(null);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Sync mode state with URL
-  useEffect(() => {
-    if (location.pathname.includes('/gui')) setModeState('gui');
-    else if (location.pathname.includes('/terminal')) setModeState('terminal');
-  }, [location.pathname]);
+  const showToast = useCallback((message: string, type: Toast['type'] = 'info') => {
+    const id = Date.now().toString();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
+  }, []);
 
-  const setMode = useCallback((newMode: 'terminal' | 'gui') => {
-    setModeState(newMode);
-    if (newMode === 'terminal') {
-      navigate('/boot/terminal');
-    } else {
-      navigate('/boot/gui');
-    }
-  }, [navigate]);
+  const removeToast = useCallback((id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  }, []);
 
   const switchMode = useCallback(() => {
-    if (mode === 'terminal') {
-      setMode('gui');
-    } else {
-      setMode('terminal');
-    }
-  }, [mode, setMode]);
+    const current = location.pathname;
+    navigate(current.includes('/gui') ? '/boot/terminal' : '/boot/gui');
+  }, [navigate]);
 
-  const openWindow = useCallback((category: WindowState['category'], title: string, icon: string) => {
+  const openApp = useCallback((appId: string, extra?: { title?: string; icon?: string; w?: number; h?: number }) => {
     setStartMenuOpen(false);
     setWindows(prev => {
-      const existing = prev.find(w => w.category === category && !w.minimized);
-      if (existing) {
-        setFocusedWindow(existing.id);
-        return prev;
-      }
-      const restored = prev.find(w => w.category === category && w.minimized);
+      const existing = prev.find(w => w.appId === appId && !w.minimized);
+      if (existing) { setFocused(existing.id); return prev; }
+      const restored = prev.find(w => w.appId === appId && w.minimized);
       if (restored) {
-        setFocusedWindow(restored.id);
+        setFocused(restored.id);
         return prev.map(w => w.id === restored.id ? { ...w, minimized: false } : w);
       }
-      const id = `${category}-${Date.now()}`;
-      const offsetX = (prev.length % 5) * 30;
-      const offsetY = (prev.length % 5) * 30;
-      const newWin: WindowState = {
-        id,
-        title,
-        icon,
-        category,
+      const openCount = prev.filter(w => !w.minimized).length;
+      const off = Math.min(openCount, 4) * 30;
+      const w = extra?.w ?? 750;
+      const h = extra?.h ?? 520;
+      const win: WindowState = {
+        id: `${appId}-${Date.now()}`,
+        appId,
+        title: extra?.title ?? appId.charAt(0).toUpperCase() + appId.slice(1),
+        icon: extra?.icon ?? '📄',
+        x: Math.max(20, (window.innerWidth - w) / 2) + off,
+        y: Math.max(20, (window.innerHeight - h - 48) / 2) + off,
+        w, h,
         minimized: false,
-        position: { x: 80 + offsetX, y: 40 + offsetY },
+        maximized: false,
+        preMaxRect: { x: 0, y: 0, w: 0, h: 0 },
       };
-      setFocusedWindow(id);
-      return [...prev, newWin];
+      setFocused(win.id);
+      return [...prev, win];
     });
-  }, [setStartMenuOpen]);
+  }, []);
 
   const closeWindow = useCallback((id: string) => {
     setWindows(prev => prev.filter(w => w.id !== id));
-    setFocusedWindow(prev => prev === id ? null : prev);
+    setFocused(prev => prev === id ? null : prev);
   }, []);
 
   const minimizeWindow = useCallback((id: string) => {
     setWindows(prev => prev.map(w => w.id === id ? { ...w, minimized: true } : w));
-    setFocusedWindow(prev => prev === id ? null : prev);
+    setFocused(prev => prev === id ? null : prev);
   }, []);
 
-  const focusWindow = useCallback((id: string) => {
-    setFocusedWindow(id);
+  const maximizeWindow = useCallback((id: string) => {
+    setWindows(prev => prev.map(w => {
+      if (w.id !== id || w.maximized) return w;
+      const pre = { x: w.x, y: w.y, w: w.w, h: w.h };
+      return { ...w, maximized: true, preMaxRect: pre, x: 0, y: 0, w: window.innerWidth, h: window.innerHeight - 56 };
+    }));
+    setFocused(id);
   }, []);
+
+  const restoreWindow = useCallback((id: string) => {
+    setWindows(prev => prev.map(w => {
+      if (w.id !== id || !w.maximized) return w;
+      return { ...w, maximized: false, x: w.preMaxRect.x, y: w.preMaxRect.y, w: w.preMaxRect.w, h: w.preMaxRect.h };
+    }));
+    setFocused(id);
+  }, []);
+
+  const focusWindow = useCallback((id: string) => setFocused(id), []);
 
   return (
-    <AppContext.Provider value={{
-      mode, setMode, windows, focusedWindow,
-      openWindow, closeWindow, minimizeWindow, focusWindow,
-      startMenuOpen, setStartMenuOpen, switchMode,
+    <Ctx.Provider value={{
+      windows, setWindows, focusedId,
+      startMenuOpen, setStartMenuOpen,
+      toasts, showToast, removeToast,
+      openApp, closeWindow, minimizeWindow, maximizeWindow, restoreWindow, focusWindow, switchMode,
     }}>
       {children}
-    </AppContext.Provider>
+    </Ctx.Provider>
   );
 }
 
-export function useApp() {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error('useApp must be inside AppProvider');
-  return ctx;
+export function useApp(): AppCtx {
+  const c = useContext(Ctx);
+  if (!c) throw new Error('useApp must be inside AppProvider');
+  return c;
 }

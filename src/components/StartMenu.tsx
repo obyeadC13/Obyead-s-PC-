@@ -1,22 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Globe, Gamepad2, BookText, Mail, MessageSquare, User, FolderOpen, Monitor } from 'lucide-react';
+import { Monitor } from 'lucide-react';
 
 const apps = [
-  { id: 'mywork', icon: FolderOpen, label: 'My Work' },
-  { id: 'about', icon: User, label: 'About Me' },
-  { id: 'browser', icon: Globe, label: 'Browser' },
-  { id: 'games', icon: Gamepad2, label: 'Game Vault' },
-  { id: 'manuscripts', icon: BookText, label: 'Manuscripts' },
-  { id: 'terminal', icon: Terminal, label: 'Terminal' },
-  { id: 'contact', icon: Mail, label: 'Contact' },
-  { id: 'guestbook', icon: MessageSquare, label: 'Guestbook' },
-  { id: 'finder', icon: FolderOpen, label: 'Finder' },
-];
-
-const socials = [
-  { id: 'github', label: 'GitHub', url: 'https://github.com' },
-  { id: 'linkedin', label: 'LinkedIn', url: 'https://linkedin.com' },
-  { id: 'instagram', label: 'Instagram', url: 'https://instagram.com' },
+  { id: 'projects', icon: '📁', label: 'Projects' },
+  { id: 'about', icon: '👤', label: 'About Me' },
+  { id: 'skills', icon: '⚡', label: 'Skills' },
+  { id: 'terminal', icon: '⬛', label: 'Terminal' },
+  { id: 'resume', icon: '📄', label: 'Resume' },
+  { id: 'contact', icon: '✉️', label: 'Contact' },
 ];
 
 export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }: {
@@ -40,8 +31,8 @@ export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }:
             initial={{ opacity: 0, y: 10, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.97 }}
-            transition={{ duration: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
-            className="fixed bottom-14 left-2 z-[500] w-64"
+            transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+            className="fixed bottom-14 left-2 z-[500] w-56"
           >
             <div
               className="rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
@@ -63,39 +54,16 @@ export default function StartMenu({ open, onClose, onLaunch, onSwitchTerminal }:
               </div>
 
               <div className="p-1.5">
-                {apps.map((app) => {
-                  const Icon = app.icon;
-                  return (
-                    <button
-                      key={app.id}
-                      onClick={() => { onLaunch(app.id); onClose(); }}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all group"
-                    >
-                      <span className="text-gray-500 group-hover:text-blood transition-colors">
-                        <Icon size={16} />
-                      </span>
-                      <span className="text-xs text-gray-400 group-hover:text-gray-200 transition-colors">{app.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="px-3 py-1.5 border-t border-red-900/10">
-                <p className="text-[9px] uppercase tracking-widest text-gray-600 mb-1.5">Links</p>
-{socials.map((s) => {
-                    return (
-                      <button
-                        key={s.id}
-                        onClick={() => { onClose(); window.open(s.url, '_blank'); }}
-                        className="w-full flex items-center gap-3 px-2 py-1.5 rounded-lg text-left transition-all group"
-                      >
-                        <span className="text-gray-600 group-hover:text-gray-400 transition-colors">
-                          <FolderOpen size={14} />
-                        </span>
-                        <span className="text-[11px] text-gray-500 group-hover:text-gray-300 transition-colors">{s.label}</span>
-                      </button>
-                    );
-                  })}
+                {apps.map((app) => (
+                  <button
+                    key={app.id}
+                    onClick={() => { onLaunch(app.id); onClose(); }}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all group hover:bg-white/5"
+                  >
+                    <span className="text-lg">{app.icon}</span>
+                    <span className="text-xs text-gray-400 group-hover:text-gray-200 transition-colors">{app.label}</span>
+                  </button>
+                ))}
               </div>
 
               <div className="px-3 py-2 border-t border-red-900/10 flex items-center justify-between">

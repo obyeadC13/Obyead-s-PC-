@@ -1,61 +1,59 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
-import { aboutMe } from '../data/projects';
-import { projects } from '../data/projects';
+import { aboutMe, projects } from '../data/projects';
 import AsteroidGame from './AsteroidGame';
 import SpaceBackground from './SpaceBackground';
 import GlitchOverlay from './GlitchOverlay';
 
 const WELCOME_ART = `.                                                                                                                   
-                                                                +-                                                                                                                  
-                                                             =-*%-                                                                                                                  
-                                                             =-*@*::                                               .                                                                
-                                                             ++#@#+-                                                -%.                                                             
-                                                             +%@@@*-                       .-  :               :  . +. :                                                            
-                                                             -%@@@%=                       =+-                    -*-:.+.                                                           
-                                                             .%@@@%+                      .#%*+ :              : .**+%%=                                                            
-                                                              *@@@%*                      :-###%-+.           ..:*@%#@%=                                                            
-                                                              +@@@#*                       :%####++           :.:@@@@%%                                                             
-                                                              %@@@@%                        +##@@@*=          + ##@@%%.                                                             
-                                                              %@@@@%                        -%##@@#%.        =-#@@@#+:                                                              
-                                                              %@@@@%                         -@%#@@@#       .*#@@@@+.                                                               
-                                                              %@@@@#                          *%*@@@@#    . +@@##@+                                                                 
-                                                             .%@@@##                          =#*#@@@@%  . =#@@###.                                                                 
-                                                              #@@@#%                           %#*#@@@@%. +#@@#@@=                                                                  
-                                                     .:      -@@@@@*                            +@*@@@@@++#@@@@@*                                                                   
-                                                    .---=-:..=@@@@@%*%*+==--=..                  =##@@@@@@@@@@#%:                                                                   
-                                                  .--%#@###@@@@@@@@@@@@#%%*%##@#:                .*##@@@@@@@@#*-                                                                    
-                                                 .-%#@@@@@@@@@@@@@@@@@@@#@###@@@@                 +#@@@@@@@@#=-.                                                                    
-                                                  :+*#@@@@@@@@@@@@@@@@@@@@@#@@@@@%                 %@@@@@@@@%-                                                                      
-                                                  -+%%#@@@@@@@@@@@@@@@@@@##@@@@@@@                 +@@@@@@@%@*                                                                      
-                                                     -=*#####@@@@@@@@@@%*%####@@@@                =*@@@@@@@@%+:                                                                     
-                                                    .-=+*#%%*#@@@@@@%*+%###@##@@@@               :*#@@@@@@@@*%=-                                                                    
-                                                             *#@@@@@=. -@@@@@@@@@@:              +%@@@@@@%@@@=+--                                                                   
-                                                             -%@@@@%    -@@@@@@@@+              =*#@@@#+%@%@@#=++-                                                                  
-                                                             =#@@@#%     *@@@@@@%             .-+##@@@= +%##@@%-#+.                                                                 
-                                                             =#@@@@@.     %@@@@*             =@%###@#+  - +@#@@#=#=                                                                 
-                                                             :#@@#@@.      #@@#             :@@#@@@@# :.   -@@@#*%#.                                                                
-                                                             .%@@@@#.      :@@.            -@@@@@@@#=+-     .##@#%%%                                                                
-                                                             .%@@@@%        .             +@@@@@@@@%**        %@#@+%-                                                               
-                                                             .%@@@@+                      @@@@@@@@##*          @###-:                                                               
-                                                             .#@@@%:                     -@@@@@@@@@%           =##*-.-.                                                             
-                                                             :#@@#*.                    :#@@@@@@@@@             :*%- --                                                             
-                                                             -%#@%+.                     @@@@@@@@@:              -+. ..                                                             
-                                                             -++#==                      #@@@@@@@%                :::                                                               
-                                                              ==#*+                      =@@@@@@@:                                                                                  
-                                                              . * .       .-:..           %@@@@@%                                                                                   
-                                                                =        :+#@#@%:         -@@@@%+                                                                                   
-                                                                .        =%@@@@#=          +@@@%`;
+                                                                 +-                                                                                                                  
+                                                              =-*%-                                                                                                                  
+                                                              =-*@*::                                               .                                                                
+                                                              ++#@#+-                                                -%.                                                             
+                                                              +%@@@*-                       .-  :               :  . +. :                                                            
+                                                              -%@@@%=                       =+-                    -*-:.+.                                                           
+                                                              .%@@@%+                      .#%*+ :              : .**+%%=                                                            
+                                                               *@@@%*                      :-###%-+.           ..:*@%#@%=                                                            
+                                                               +@@@#*                       :%####++           :.:@@@@%%                                                             
+                                                               %@@@@%                        +##@@@*=          + ##@@%%.                                                             
+                                                               %@@@@%                        -%##@@#%.        =-#@@@#+:                                                              
+                                                               %@@@@%                         -@%#@@@#       .*#@@@@+.                                                               
+                                                               %@@@@#                          *%*@@@@#    . +@@##@+                                                                 
+                                                              .%@@@##                          =#*#@@@@%  . =#@@###.                                                                 
+                                                               #@@@#%                           %#*#@@@@%. +#@@#@@=                                                                  
+                                                      .:      -@@@@@*                            +@*@@@@@++#@@@@@*                                                                   
+                                                     .---=-:..=@@@@@%*%*+==--=..                  =##@@@@@@@@@@#%:                                                                   
+                                                   .--%#@###@@@@@@@@@@@@#%%*%##@#:                .*##@@@@@@@@#*-                                                                    
+                                                  .-%#@@@@@@@@@@@@@@@@@@@#@###@@@@                 +#@@@@@@@@#=-.                                                                    
+                                                   :+*#@@@@@@@@@@@@@@@@@@@@@#@@@@@%                 %@@@@@@@@%-                                                                      
+                                                   -+%%#@@@@@@@@@@@@@@@@@@##@@@@@@@                 +@@@@@@@%@*                                                                      
+                                                      -=*#####@@@@@@@@@@%*%####@@@@                =*@@@@@@@@%+:                                                                     
+                                                     .-=+*#%%*#@@@@@@%*+%###@##@@@@               :*#@@@@@@@@*%=-                                                                    
+                                                              *#@@@@@=. -@@@@@@@@@@:              +%@@@@@@%@@@=+--                                                                   
+                                                              -%@@@@%    -@@@@@@@@+              =*#@@@#+%@%@@#=++-                                                                  
+                                                              =#@@@#%     *@@@@@@%             .-+##@@@= +%##@@%-#+.                                                                 
+                                                              =#@@@@@.     %@@@@*             =@%###@#+  - +@#@@#=#=                                                                 
+                                                              :#@@#@@.      #@@#             :@@#@@@@# :.   -@@@#*%#.                                                                
+                                                              .%@@@@#.      :@@.            -@@@@@@@#=+-     .##@#%%%                                                                
+                                                              .%@@@@%        .             +@@@@@@@@%**        %@#@+%-                                                               
+                                                              .%@@@@+                      @@@@@@@@##*          @###-:                                                               
+                                                              .#@@@%:                     -@@@@@@@@@%           =##*-.-.                                                             
+                                                              :#@@#*.                    :#@@@@@@@@@             :*%- --                                                             
+                                                              -%#@%+.                     @@@@@@@@@:              -+. ..                                                             
+                                                              -++#==                      #@@@@@@@%                :::                                                               
+                                                               ==#*+                      =@@@@@@@:                                                                                  
+                                                               . * .       .-:..           %@@@@@%                                                                                   
+                                                                 =        :+#@#@%:         -@@@@%+                                                                                   
+                                                                 .        =%@@@@#=          +@@@%`;
 
 const COMMANDS_BLOCK = `
   ▓▓▓ AVAILABLE COMMANDS ▓▓▓
   ─────────────────────────────────────────
 
   about       [▸] Who am I?
-  web         [▸] View web development projects
-  games       [▸] View game development projects
-  writing     [▸] View writing portfolio
-  projects    [▸] List all projects
+  projects    [▸] View all projects
+  web         [▸] View web projects
+  games       [▸] View game projects
   play        [▸] Play Asteroid Destroyer
   clear       [▸] Clear terminal
   reboot      [▸] Switch to GUI mode
@@ -113,33 +111,38 @@ export default function TerminalMode() {
         output.push('  OBYEAD // SYSOP');
         output.push('  ' + DIVIDER);
         output.push('');
-        output.push(...aboutMe.split('\n').map(line => `  ${line}`));
+        output.push(...aboutMe.split('\n').map((line: string) => `  ${line}`));
         output.push('');
         break;
       case 'web':
+        output.push('  🌐 WEB DEVELOPMENT');
+        output.push('  ' + DIVIDER);
+        projects.filter((p: any) => p.category === 'web').forEach((p: any, i: number) => {
+          output.push(`  ▸ ${i + 1}. ${p.name}`);
+          output.push(`    ${p.shortDescription}`);
+          output.push(`    └─ [ ${p.tech.join(' │ ')} ]`);
+          output.push('');
+        });
+        break;
       case 'games':
-      case 'writing':
-        const cat = projects[trimmed as keyof typeof projects];
-        if (cat) {
-          output.push(`  ${cat.icon} ${cat.title.toUpperCase()}`);
-          output.push('  ' + DIVIDER);
-          cat.projects.forEach((p, i) => {
-            output.push(`  ▸ ${i + 1}. ${p.name}`);
-            output.push(`    ${p.description}`);
-            output.push(`    └─ [ ${p.tech.join(' │ ')} ]`);
-            output.push('');
-          });
-        }
+        output.push('  🎮 GAME DEVELOPMENT');
+        output.push('  ' + DIVIDER);
+        projects.filter((p: any) => p.category === 'game').forEach((p: any, i: number) => {
+          output.push(`  ▸ ${i + 1}. ${p.name}`);
+          output.push(`    ${p.shortDescription}`);
+          output.push(`    └─ [ ${p.tech.join(' │ ')} ]`);
+          output.push('');
+        });
         break;
       case 'projects':
         output.push('  ALL PROJECTS // SYSTEM OVERVIEW');
         output.push('  ' + DIVIDER);
-        Object.entries(projects).forEach(([_key, c]) => {
-          output.push(`  ${c.icon} ${c.title} (${c.projects.length})`);
-          c.projects.forEach(p => { output.push(`    └─▸ ${p.name}`); });
+        projects.forEach((p: any) => {
+          const cat = p.category === 'web' ? '🌐' : p.category === 'game' ? '🎮' : '📦';
+          output.push(`  ${cat} ${p.name}${p.featured ? ' ★' : ''}`);
+          output.push(`    ${p.shortDescription}`);
           output.push('');
         });
-        output.push('');
         break;
       case 'play':
         setPlayingGame(true);
@@ -154,11 +157,13 @@ export default function TerminalMode() {
         setTimeout(() => switchMode(), 1000);
         break;
       case 'whoami':
-        output.push('  ⚠ Use "about" instead.');
+        output.push('  obyead // developer, game maker, writer');
+        output.push('  clearance: LEVEL-5');
+        output.push('  status: ACTIVE');
         output.push('');
         break;
       case 'date':
-        output.push('  ⚠ Date: ' + new Date().toString());
+        output.push('  ' + new Date().toString());
         output.push('');
         break;
       case 'start':
@@ -230,7 +235,7 @@ export default function TerminalMode() {
                   </div>
                 </div>
               )}
-              {history.map((line, i) => (
+              {history.map((line: string, i: number) => (
                 <pre key={i} className="whitespace-pre-wrap leading-relaxed text-sm">
                   {line}
                 </pre>

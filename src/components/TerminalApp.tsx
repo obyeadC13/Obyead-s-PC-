@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { aboutMe } from '../data/projects';
-import { projects } from '../data/projects';
 
 const DIVIDER = '─'.repeat(45);
 
@@ -40,74 +38,26 @@ export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void
     setCmdHistory(prev => [...prev, cmd]);
     setHistoryIndex(-1);
 
-    if (trimmed === 'browser') { onLaunch('browser'); output.push('  ▸ Opening Browser ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
-    if (trimmed === 'games') { onLaunch('games'); output.push('  ▸ Opening Game Vault ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
-    if (trimmed === 'writings') { onLaunch('manuscripts'); output.push('  ▸ Opening Manuscripts ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
+    if (trimmed === 'projects') { onLaunch('projects'); output.push('  ▸ Opening Projects ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
+    if (trimmed === 'about') { onLaunch('about'); output.push('  ▸ Opening About ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
     if (trimmed === 'contact') { onLaunch('contact'); output.push('  ▸ Opening Contact ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
+    if (trimmed === 'skills') { onLaunch('skills'); output.push('  ▸ Opening Skills ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
+    if (trimmed === 'resume') { onLaunch('resume'); output.push('  ▸ Opening Resume ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
 
     switch (trimmed) {
       case 'help':
         output.push('  ▓▓▓ AVAILABLE COMMANDS ▓▓▓');
         output.push('  ' + DIVIDER);
-        output.push('  about       [▸] Who am I?');
-        output.push('  web         [▸] View web development projects');
-        output.push('  games       [▸] View game development projects');
-        output.push('  writing     [▸] View writing portfolio');
-        output.push('  projects    [▸] List all projects');
-        output.push('  start       [▸] Begin the experience');
-        output.push('  browser     [▸] Open in-window browser');
+        output.push('  projects    [▸] Open Projects window');
+        output.push('  about       [▸] Open About window');
+        output.push('  skills      [▸] Open Skills window');
+        output.push('  contact     [▸] Open Contact window');
+        output.push('  resume      [▸] Open Resume');
         output.push('  whoami      [▸] Current user info');
         output.push('  date        [▸] System time');
+        output.push('  neofetch    [▸] System info');
         output.push('  clear       [▸] Clear terminal');
         output.push('  ' + DIVIDER);
-        output.push('');
-        break;
-      case 'about':
-        output.push('  OBYEAD // SYSOP');
-        output.push('  ' + DIVIDER);
-        output.push('');
-        output.push(...aboutMe.split('\n').map(line => `  ${line}`));
-        output.push('');
-        break;
-      case 'web':
-      case 'games':
-      case 'writing':
-        const cat = projects[trimmed as keyof typeof projects];
-        if (cat) {
-          output.push(`  ${cat.icon} ${cat.title.toUpperCase()}`);
-          output.push('  ' + DIVIDER);
-          cat.projects.forEach((p, i) => {
-            output.push(`  ▸ ${i + 1}. ${p.name}`);
-            output.push(`    ${p.description}`);
-            output.push(`    └─ [ ${p.tech.join(' │ ')} ]`);
-            output.push('');
-          });
-        }
-        break;
-      case 'projects':
-        output.push('  ALL PROJECTS // OVERVIEW');
-        output.push('  ' + DIVIDER);
-        Object.entries(projects).forEach(([_key, c]) => {
-          output.push(`  ${c.icon} ${c.title} (${c.projects.length})`);
-          c.projects.forEach(p => { output.push(`    └─▸ ${p.name}`); });
-          output.push('');
-        });
-        output.push('');
-        break;
-      case 'start':
-        output.push('  OBYEAD // PORTFOLIO // START');
-        output.push('');
-        output.push('  ▸ Loading projects ...');
-        output.push('  ▸ Use "web", "games", "writing" to explore');
-        output.push('  ▸ Use "projects" for full overview');
-        output.push('');
-        break;
-      case 'clear':
-        setLines(['']);
-        setInput('');
-        return;
-      case 'reboot':
-        output.push('  ▸ Switching to fullscreen terminal ...');
         output.push('');
         break;
       case 'whoami':
@@ -121,6 +71,22 @@ export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void
         output.push('  UPTIME: SYSTEM NOMINAL');
         output.push('');
         break;
+      case 'neofetch':
+        output.push('       ┌───┐            obyead@obyead-pc');
+        output.push('       │   │            ──────────────────');
+        output.push('       │ ◉ │            OS: X+ OS v4.0');
+        output.push('       │   │            Shell: xterm-256color');
+        output.push('       │ ◉ │            Resolution: ' + window.innerWidth + 'x' + window.innerHeight);
+        output.push('       └───┘            Window Manager: X+ Desktop');
+        output.push('                         Terminal: X+ Terminal');
+        output.push('                         CPU: Neural Core 4x @ 4.2GHz');
+        output.push('                         Memory: 32GB DDR5 ECC');
+        output.push('');
+        break;
+      case 'clear':
+        setLines(['']);
+        setInput('');
+        return;
       default:
         output.push(`  ⚠ Command not found: ${cmd}`);
         output.push('  ▸ Type "help" for available commands.');
@@ -163,7 +129,6 @@ export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void
       style={{ background: '#0a0a1a', color: '#4da6ff' }}
       onClick={handleClick}
     >
-      {/* Title bar */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-white/10"
         style={{ background: '#0a0a1a' }}>
         <span className="text-[11px]">Terminal v4.0</span>
@@ -172,9 +137,8 @@ export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void
         </button>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-y-auto p-3 text-xs">
-        {lines.map((line, i) => (
+        {lines.map((line: string, i: number) => (
           <pre key={i} className="whitespace-pre-wrap leading-relaxed">
             {line}
           </pre>
@@ -183,7 +147,6 @@ export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void
         <div className="h-2" />
       </div>
 
-      {/* Prompt bar */}
       <form onSubmit={handleSubmit} className="border-t border-white/10 px-3 py-2 flex items-center gap-2"
         style={{ background: '#0a0a1a' }}>
         <span className="text-[11px] font-medium shrink-0">obyead@obyead-pc:~$</span>
