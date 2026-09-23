@@ -80,19 +80,21 @@
   }
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-  overflow: hidden;
-  background: #000;
-  color: #e5e7eb;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  body {
+    overflow: hidden;
+    background: #000;
+    color: #e5e7eb;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  input::placeholder, textarea::placeholder { color: #6b2131; }
 }
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(220, 38, 38, 0.2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(220, 38, 38, 0.4); }
-
-input::placeholder, textarea::placeholder { color: #6b2131; }
