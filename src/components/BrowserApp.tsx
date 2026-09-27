@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { X, ExternalLink, ArrowLeft, ArrowRight, RotateCcw, Plus, Search, Lock, AlertTriangle } from 'lucide-react';
 
 interface Tab {
@@ -21,8 +21,19 @@ export default function BrowserApp(_props: { onClose: () => void }) {
   const [activeTabId, setActiveTabId] = useState('1');
   const [urlInput, setUrlInput] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
+  const [embedFailed, setEmbedFailed] = useState(false);
   const iframeRefs = useRef<Record<string, HTMLIFrameElement | null>>({});
+  const loadedUrlRef = useRef<string | null>(null);
   const activeTab = tabs.find(t => t.id === activeTabId)!;
+
+  useEffect(() => {
+    if (!activeTab.url || activeTab.blocked || embedFailed) return;
+    const url = activeTab.url;
+    const t = setTimeout(() => {
+      if (loadedUrlRef.current !== url) setEmbedFailed(true);
+    }, 6000);
+    return () => clearTimeout(t);
+  }, [activeTab.url, activeTab.blocked, embedFailed]);
 
   const updateTab = useCallback((id: string, updates: Partial<Tab>) => {
     setTabs(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t));
@@ -46,6 +57,7 @@ export default function BrowserApp(_props: { onClose: () => void }) {
       catch { return url; }
     })();
     updateTab(targetId, { url, loading: true, blocked: false, title: hostname, history, historyIndex: history.length - 1 });
+    setEmbedFailed(false);
     setUrlInput(url);
     setSearchFocus(false);
   };
@@ -85,10 +97,6 @@ export default function BrowserApp(_props: { onClose: () => void }) {
     const next = tabs.filter(t => t.id !== id);
     setTabs(next);
     if (activeTabId === id) { setActiveTabId(next[next.length - 1].id); }
-  };
-
-  const handleIframeError = () => {
-    updateTab(activeTabId, { blocked: true, loading: false });
   };
 
   return (
@@ -159,15 +167,27 @@ export default function BrowserApp(_props: { onClose: () => void }) {
               <ExternalLink size={12} /> Open in New Tab
             </a>
           </div>
+        ) : embedFailed ? (
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-14 h-14 rounded-2xl bg-yellow-950/20 border border-yellow-900/30 flex items-center justify-center mb-4">
+              <AlertTriangle size={24} className="text-yellow-500/70" />
+            </div>
+            <h3 className="text-sm font-semibold text-gray-300 mb-1">Can't show it here</h3>
+            <p className="text-[11px] text-gray-500 mb-4 max-w-xs">This website blocks being shown inside other apps (X-Frame-Options), so it won't load in the embedded view. Open it in your browser instead.</p>
+            <a href={activeTab.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium bg-blood/80 text-white hover:bg-crimson transition-colors">
+              <ExternalLink size={12} /> Open in New Tab
+            </a>
+          </div>
         ) : (
           <iframe
             ref={el => { iframeRefs.current[activeTabId] = el; }}
             src={activeTab.url}
             className="w-full h-full border-0"
             onLoad={() => {
+              loadedUrlRef.current = activeTab.url;
+              setEmbedFailed(false);
               setTimeout(() => { updateTab(activeTabId, { loading: false }); }, 500);
             }}
-            onError={handleIframeError}
             title={activeTab.title}
           />
         )}
