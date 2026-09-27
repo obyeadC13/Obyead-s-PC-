@@ -53,7 +53,7 @@ function HomeScreen({ time, onOpen }: { time: Date; onOpen: (id: string) => void
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, y: 30 }}
       transition={{ duration: 0.18 }}
-      className="absolute inset-0 flex flex-col pt-14 pb-20 px-6"
+      className="absolute inset-0 z-[10] flex flex-col pt-14 pb-20 px-6"
     >
       <div className="mt-8 text-center select-none">
         <p className="text-6xl font-thin text-white tracking-tight" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
@@ -109,19 +109,19 @@ function AppSwitcher({ open, active, onPick, onClose }: {
             style={{ background: 'rgba(20,20,30,0.92)', backdropFilter: 'blur(20px)' }}
           >
             <p className="text-[10px] uppercase tracking-widest text-white/40 mb-3 px-1">Recent apps</p>
-            <div className="flex gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {APPS.map(app => {
                 const isActive = app.id === active;
                 return (
                   <button
                     key={app.id}
                     onClick={() => { onPick(app.id); onClose(); }}
-                    className={`flex flex-col items-center gap-1.5 rounded-xl p-2 transition-colors ${isActive ? 'bg-white/10' : 'active:bg-white/5'}`}
+                    className={`flex flex-col items-center gap-1 rounded-xl p-1.5 transition-colors ${isActive ? 'bg-white/10' : 'active:bg-white/5'}`}
                   >
-                    <span className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl border ${isActive ? 'bg-[#863bff]/30 border-[#863bff]/60' : 'bg-white/[0.06] border-white/10'}`}>
+                    <span className={`w-full aspect-square rounded-xl flex items-center justify-center text-lg border ${isActive ? 'bg-[#863bff]/30 border-[#863bff]/60' : 'bg-white/[0.06] border-white/10'}`}>
                       {app.icon}
                     </span>
-                    <span className="text-[9px] text-white/70">{app.name}</span>
+                    <span className="text-[9px] text-white/70 truncate w-full text-center">{app.name}</span>
                   </button>
                 );
               })}
@@ -194,7 +194,7 @@ export default function MobileMode() {
       {/* Same wallpaper as PC, just smaller */}
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'auto 45%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
       <div className="absolute inset-0 z-[1] bg-[#05070d]/40" />
-      <div className="absolute inset-0 z-[2]" style={{ opacity: 0.8 }}><Starfield /></div>
+      <div className="absolute inset-0 z-[2] pointer-events-none" style={{ opacity: 0.8 }}><Starfield /></div>
 
       <StatusBar time={time} />
 
