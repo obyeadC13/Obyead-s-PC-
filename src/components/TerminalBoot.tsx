@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const BOOT_LINES = [
   { text: '╔══════════════════════════════════════════════════╗', type: 'header' },
-  { text: '║     OBYEAD SYSTEM // TERMINAL ENVIRONMENT       ║', type: 'header' },
+  { text: '║     OBYEAD\'S SYSTEM // TERMINAL ENVIRONMENT      ║', type: 'header' },
   { text: '╚══════════════════════════════════════════════════╝', type: 'header' },
   { text: '', type: 'normal' },
   { text: '[KERNEL] Loading kernel modules...', type: 'system' },
