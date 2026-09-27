@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp, isMobile } from '../context/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlitchOverlay from './GlitchOverlay';
 import Starfield from './Starfield';
@@ -127,8 +127,12 @@ export default function DesktopMode() {
             key={ic.id}
             className="absolute flex flex-col items-center pointer-events-auto cursor-pointer"
             style={{ left: 20, top: 48 + idx * 96 }}
-            onDoubleClick={() => handleIconDblClick(ic.id)}
-            onClick={(e) => { e.stopPropagation(); setSelectedIcon(ic.id); }}
+            onDoubleClick={() => { if (!isMobile()) handleIconDblClick(ic.id); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isMobile()) { handleIconDblClick(ic.id); return; }
+              setSelectedIcon(ic.id);
+            }}
             onMouseEnter={() => setSelectedIcon(ic.id)}
             onMouseLeave={() => setSelectedIcon(null)}
           >

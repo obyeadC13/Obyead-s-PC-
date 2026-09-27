@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Minus, Square, X, Copy } from 'lucide-react';
-import { useApp } from '../context/AppContext';
+import { useApp, isMobile } from '../context/AppContext';
 
 interface Props {
   win: {
@@ -27,6 +27,7 @@ export default function AppWindow({ win, children }: Props) {
   winRef.current = win;
 
   const startDrag = (e: React.MouseEvent) => {
+    if (isMobile()) return;
     if ((e.target as HTMLElement).closest('button')) return;
     e.preventDefault();
     ctx.focusWindow(win.id);
@@ -36,6 +37,7 @@ export default function AppWindow({ win, children }: Props) {
   };
 
   const onTitleDblClick = (e: React.MouseEvent) => {
+    if (isMobile()) return;
     if ((e.target as HTMLElement).closest('button')) return;
     win.maximized ? ctx.restoreWindow(win.id) : ctx.maximizeWindow(win.id);
   };
@@ -173,7 +175,7 @@ export default function AppWindow({ win, children }: Props) {
       </div>
 
       {/* Resize handles */}
-      {!win.maximized && (
+      {!win.maximized && !isMobile() && (
         <>
           <div className="absolute top-0 left-0 w-4 h-4 cursor-nw-resize z-30" onMouseDown={startResize('nw')} />
           <div className="absolute top-0 right-0 w-4 h-4 cursor-ne-resize z-30" onMouseDown={startResize('ne')} />

@@ -39,6 +39,10 @@ interface AppCtx {
   switchMode: () => void;
 }
 
+export function isMobile() {
+  return window.matchMedia('(max-width: 767px)').matches;
+}
+
 const Ctx = createContext<AppCtx | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
@@ -74,7 +78,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return prev.map(w => w.id === restored.id ? { ...w, minimized: false } : w);
       }
       const openCount = prev.filter(w => !w.minimized).length;
-      const off = Math.min(openCount, 4) * 30;
+      const off = isMobile() ? 0 : Math.min(openCount, 4) * 30;
       const w = extra?.w ?? 750;
       const h = extra?.h ?? 520;
       const win: WindowState = {
@@ -82,9 +86,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
         appId,
         title: extra?.title ?? appId.charAt(0).toUpperCase() + appId.slice(1),
         icon: extra?.icon ?? '📄',
-        x: Math.max(16, (window.innerWidth - w) / 2) + off,
-        y: Math.max(44, (window.innerHeight - h) / 2) + off,
-        w, h,
+        x: isMobile() ? 0 : Math.max(16, (window.innerWidth - w) / 2) + off,
+        y: isMobile() ? 32 : Math.max(44, (window.innerHeight - h) / 2) + off,
+        w: isMobile() ? window.innerWidth : w,
+        h: isMobile() ? window.innerHeight - 32 - 48 : h,
         minimized: false,
         maximized: false,
         preMaxRect: { x: 0, y: 0, w: 0, h: 0 },
