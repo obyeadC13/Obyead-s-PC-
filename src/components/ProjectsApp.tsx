@@ -77,7 +77,7 @@ export default function ProjectsApp(_props: { onClose: () => void }) {
     const p = projects.find(x => x.id === id);
     if (!p) return;
     navigate(id);
-    if (p.link && !isTouch()) setLiveId(id);
+    if (p.link) setLiveId(id);
     showToast(`Opened ${fileName(p)}`, 'info');
   };
 
@@ -235,13 +235,21 @@ function LiveView({ project, onBack }: {
 
   useEffect(() => {
     if (!url || loaded || failed) return;
+    const delay = isTouch() ? 6000 : 12000;
     const t = setTimeout(() => {
       setFailed(true);
-      window.open(url, '_blank');
-      setAutoOpened(true);
-    }, 12000);
+      if (!isTouch()) {
+        window.open(url, '_blank');
+        setAutoOpened(true);
+      }
+    }, delay);
     return () => clearTimeout(t);
   }, [url, loaded, failed]);
+
+  const openHere = () => {
+    if (isTouch()) { window.location.href = url; return; }
+    window.open(url, '_blank');
+  };
 
   return (
     <div className="flex flex-col h-full bg-[#1e1e1e]">
@@ -259,10 +267,10 @@ function LiveView({ project, onBack }: {
           <span className="text-[11px] text-gray-300 truncate">{url}</span>
         </div>
         <button
-          onClick={() => window.open(url, '_blank')}
+          onClick={openHere}
           className="flex items-center gap-1.5 px-3 h-8 rounded-md bg-white/[0.05] text-gray-400 text-[11px] hover:bg-white/10 transition-colors border border-white/10"
         >
-          <ExternalLink size={11} /> New Tab
+          <ExternalLink size={11} /> {isTouch() ? 'Open Here' : 'New Tab'}
         </button>
       </div>
 
@@ -284,10 +292,10 @@ function LiveView({ project, onBack }: {
                 : `${new URL(url).hostname} blocks being displayed inside other pages (X-Frame-Options).`}
             </p>
             <button
-              onClick={() => window.open(url, '_blank')}
+              onClick={openHere}
               className="mt-2 flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#863bff] text-white text-xs font-medium hover:bg-[#954dff] transition-colors"
             >
-              <ExternalLink size={12} /> {autoOpened ? 'Re-open in new tab' : 'Open in new tab'}
+              <ExternalLink size={12} /> {isTouch() ? 'Open in this tab' : (autoOpened ? 'Re-open in new tab' : 'Open in new tab')}
             </button>
           </div>
         )}
@@ -331,14 +339,6 @@ function ProjectDetail({ project, onBack, openExternal }: {
           <p className="text-[10px] text-gray-500 truncate">{project.name} — {project.shortDescription}</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          {project.link && (
-            <button
-              onClick={() => openExternal(project.link)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#863bff]/15 text-[#b78aff] text-[11px] hover:bg-[#863bff]/25 transition-colors border border-[#863bff]/30"
-            >
-              <ExternalLink size={12} /> Live Site
-            </button>
-          )}
           {project.githubUrl && project.githubUrl !== '#' && (
             <button
               onClick={() => openExternal(project.githubUrl)}

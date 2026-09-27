@@ -122,7 +122,7 @@ export const projects: Project[] = [
     tech: ['Dart', 'Android Studio', 'Google API', 'GPS/GSM Hardware'],
     role: 'Researcher, Programmer',
     year: '2022',
-    link: 'https://ieeexplore.ieee.org/document/11272007',
+    link: 'https://sites.google.com/view/team-hdmi/',
     githubUrl: 'https://github.com/OO13Sp',
     overview: 'A device that uses GPS & GSM modules to track vehicles, paired with an app built in Dart and Android Studio with Google API integration. The results were written up as a comprehensive research paper published on IEEE.',
     problem: 'Vehicle tracking needs both reliable hardware telemetry and a mobile interface to view it.',
