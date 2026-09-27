@@ -191,10 +191,10 @@ export default function MobileMode() {
 
   return (
     <div className="h-screen overflow-hidden relative" style={{ background: '#05070d' }}>
-      {/* Smaller, dimmer wallpaper on mobile */}
-      <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', transform: 'scale(0.85)', opacity: 0.55, filter: 'saturate(0.7) brightness(0.6)' }} />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#05070d]/70 via-transparent to-[#05070d]/90" />
-      <div className="absolute inset-0 z-[2]" style={{ opacity: 0.5 }}><Starfield /></div>
+      {/* Same wallpaper as PC, just smaller */}
+      <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'auto 45%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
+      <div className="absolute inset-0 z-[1] bg-[#05070d]/40" />
+      <div className="absolute inset-0 z-[2]" style={{ opacity: 0.8 }}><Starfield /></div>
 
       <StatusBar time={time} />
 

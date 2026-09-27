@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ExternalLink, ArrowLeft, ChevronRight, Search, File } from 'lucide-react';
 import { projects, type Project } from '../data/projects';
-import { useApp } from '../context/AppContext';
+import { useApp, isTouch } from '../context/AppContext';
 
 type FolderId = 'web' | 'games' | 'client' | 'experiments';
 type View = 'root' | FolderId | string;
@@ -182,7 +182,10 @@ export default function ProjectsApp(_props: { onClose: () => void }) {
             {items.map(item => (
               <button
                 key={item.id}
-                onClick={() => setSelected(item.id)}
+                onClick={() => {
+                  if (isTouch()) { item.kind === 'folder' ? openFolder(item.id as FolderId) : openProject(item.id); }
+                  else setSelected(item.id);
+                }}
                 onDoubleClick={() => item.kind === 'folder' ? openFolder(item.id as FolderId) : openProject(item.id)}
                 className={`group flex flex-col items-center gap-2 p-4 rounded-lg border transition-all ${
                   selected === item.id
@@ -215,7 +218,7 @@ export default function ProjectsApp(_props: { onClose: () => void }) {
       {/* Status bar */}
       <div className="flex items-center justify-between px-4 h-7 border-t border-white/5 text-[10px] text-gray-600">
         <span>{items.length} item{items.length === 1 ? '' : 's'}</span>
-        <span>Double-click to open</span>
+        <span>{isTouch() ? 'Tap to open' : 'Double-click to open'}</span>
       </div>
     </div>
   );

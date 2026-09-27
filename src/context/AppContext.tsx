@@ -43,6 +43,10 @@ export function isMobile() {
   return window.matchMedia('(max-width: 767px)').matches;
 }
 
+export function isTouch() {
+  return window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+}
+
 const Ctx = createContext<AppCtx | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
