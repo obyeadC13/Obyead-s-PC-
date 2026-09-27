@@ -123,7 +123,9 @@ export default function TerminalMode() {
 
   const isClient = (id: string) => ['stratford-salon', 'fat-ink', 'odyssey'].includes(id);
 
-  switch (trimmed) {
+  const first = trimmed.split(/\s+/)[0];
+
+  switch (first) {
     case 'help':
       output.push(COMMANDS_BLOCK);
       break;
