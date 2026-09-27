@@ -113,10 +113,10 @@ export const projects: Project[] = [
     learnings: ['Flutter/Dart app development', 'API integration', 'Figma to production UI'],
   },
   {
-    id: 'hdmi-dynamic-weather-app',
-    name: 'HDMI Dynamic Weather App',
+    id: 'hdmi',
+    name: 'HDMI',
     description: 'IoT vehicle tracking device + mobile app, with research published on IEEE.',
-    shortDescription: 'IoT tracker published on IEEE',
+    shortDescription: 'HDMI',
     category: 'other',
     featured: false,
     tech: ['Dart', 'Android Studio', 'Google API', 'GPS/GSM Hardware'],

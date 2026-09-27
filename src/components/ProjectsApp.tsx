@@ -3,14 +3,14 @@ import { ExternalLink, ArrowLeft, ChevronRight, Search, File } from 'lucide-reac
 import { projects, type Project } from '../data/projects';
 import { useApp, isTouch } from '../context/AppContext';
 
-type FolderId = 'web' | 'games' | 'client' | 'experiments';
+type FolderId = 'web' | 'games' | 'client' | 'research';
 type View = 'root' | FolderId | string;
 
 const FOLDERS: { id: FolderId; name: string }[] = [
   { id: 'web', name: 'Web Apps' },
   { id: 'client', name: 'Client Work' },
   { id: 'games', name: 'Games' },
-  { id: 'experiments', name: 'Experiments' },
+  { id: 'research', name: 'Research' },
 ];
 
 function folderOf(p: Project): FolderId {
@@ -30,15 +30,15 @@ function folderOf(p: Project): FolderId {
     case 'super-swipe':
       return 'games';
     case 'dynamic-weather-app':
-    case 'hdmi-dynamic-weather-app':
-      return 'experiments';
+    case 'hdmi':
+      return 'research';
     default:
-      return 'experiments';
+      return 'research';
   }
 }
 
 const fileName = (p: Project) => p.id + '.project';
-const categoryLabel = (c: Project['category']) => c === 'game' ? 'Game' : c === 'mobile' ? 'Mobile app' : c === 'web' ? 'Web app' : 'Experiment';
+const categoryLabel = (c: Project['category']) => c === 'game' ? 'Game' : c === 'mobile' ? 'Mobile app' : c === 'web' ? 'Web app' : 'Research';
 const categoryIcon = (c: Project['category']) => c === 'game' ? '🎮' : c === 'mobile' ? '📱' : c === 'web' ? '🌐' : '🔬';
 
 export default function ProjectsApp(_props: { onClose: () => void }) {

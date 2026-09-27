@@ -73,7 +73,7 @@ export interface CvProject {
 
 export const projects = [
   {
-    name: 'HDMI Dynamic Weather App',
+    name: 'HDMI',
     role: 'Researcher, Programmer',
     year: '2022',
     bullets: [
