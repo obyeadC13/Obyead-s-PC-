@@ -39,7 +39,6 @@ function StatusBar({ time }: { time: Date }) {
       </div>
       <div className="flex items-center gap-1.5">
         <span className="text-[10px]">📶</span>
-        <span className="text-[10px]">🔋 82%</span>
       </div>
     </div>
   );

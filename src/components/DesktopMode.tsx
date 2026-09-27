@@ -115,7 +115,6 @@ export default function DesktopMode() {
             <span style={{ textShadow: '0 0 8px #00f0ff66' }}>{'> _'}</span>
             <span>Terminal</span>
           </button>
-          <span className="text-xs">🔋 82%</span>
           <span className="text-xs">📶</span>
         </div>
       </div>
