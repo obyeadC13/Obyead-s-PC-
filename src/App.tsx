@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { AppProvider } from './context/AppContext';
 import BootScreen from './components/BootScreen';
 import TerminalMode from './components/TerminalMode';
@@ -18,6 +19,7 @@ function App() {
         <Route path="/mobile" element={<MobileMode />} />
         <Route path="/gui" element={<DesktopMode />} />
       </Routes>
+      <Analytics />
     </AppProvider>
   );
 }
