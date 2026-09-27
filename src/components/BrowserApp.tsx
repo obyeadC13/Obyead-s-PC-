@@ -16,7 +16,7 @@ const initialTabs: Tab[] = [
   { id: '1', title: 'Home', url: '', icon: '🏠', loading: false, history: [], historyIndex: -1, blocked: false },
 ];
 
-export default function BrowserApp({ onClose }: { onClose: () => void }) {
+export default function BrowserApp(_props: { onClose: () => void }) {
   const [tabs, setTabs] = useState<Tab[]>(initialTabs);
   const [activeTabId, setActiveTabId] = useState('1');
   const [urlInput, setUrlInput] = useState('');
@@ -106,7 +106,6 @@ export default function BrowserApp({ onClose }: { onClose: () => void }) {
           </div>
         ))}
         <button onClick={addTab} className="w-6 h-6 rounded-md flex items-center justify-center text-gray-500 hover:text-blood hover:bg-red-950/30 transition-colors mb-0.5"><Plus size={12} /></button>
-        <button onClick={onClose} className="w-6 h-6 rounded-md flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-950/30 transition-colors ml-auto mb-0.5"><X size={14} /></button>
       </div>
 
       <div className="flex items-center gap-1.5 px-2 py-2 border-b border-red-900/10 bg-black/15">

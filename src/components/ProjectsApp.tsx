@@ -1,36 +1,47 @@
-import { useState, useMemo } from 'react';
-import { X, ExternalLink, ArrowLeft, ChevronRight, Search, File } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { ExternalLink, ArrowLeft, ChevronRight, Search, File } from 'lucide-react';
 import { projects, type Project } from '../data/projects';
 import { useApp } from '../context/AppContext';
 
-type FolderId = 'web' | 'games' | 'experiments';
+type FolderId = 'web' | 'games' | 'client' | 'experiments';
 type View = 'root' | FolderId | string;
 
 const FOLDERS: { id: FolderId; name: string }[] = [
   { id: 'web', name: 'Web Apps' },
+  { id: 'client', name: 'Client Work' },
   { id: 'games', name: 'Games' },
   { id: 'experiments', name: 'Experiments' },
 ];
 
 function folderOf(p: Project): FolderId {
   switch (p.id) {
-    case 'crm-snowy':
-    case 'pos-snowy':
-    case 'local-pos-snowy':
-    case 'fatink':
+    case 'fame':
+    case 'safeguard':
+    case 'spotify-clone':
+    case 'obyeads-world':
+    case 'snowy-crm':
+    case 'snowy-pos':
       return 'web';
+    case 'stratford-salon':
+    case 'fat-ink':
+    case 'odyssey':
+      return 'client';
     case 'terminal-13':
-    case 'project-13':
     case 'super-swipe':
       return 'games';
+    case 'dynamic-weather-app':
+    case 'hdmi-dynamic-weather-app':
+      return 'experiments';
     default:
       return 'experiments';
   }
 }
 
 const fileName = (p: Project) => p.id + '.project';
+const categoryLabel = (c: Project['category']) => c === 'game' ? 'Game' : c === 'mobile' ? 'Mobile app' : c === 'web' ? 'Web app' : 'Experiment';
+const categoryIcon = (c: Project['category']) => c === 'game' ? '🎮' : c === 'mobile' ? '📱' : c === 'web' ? '🌐' : '🔬';
 
-export default function ProjectsApp({ onClose }: { onClose: () => void }) {
+export default function ProjectsApp(_props: { onClose: () => void }) {
   const { showToast } = useApp();
   const [view, setView] = useState<View>('root');
   const [history, setHistory] = useState<View[]>(['root']);
@@ -63,8 +74,11 @@ export default function ProjectsApp({ onClose }: { onClose: () => void }) {
 
   const openFolder = (f: FolderId) => navigate(f);
   const openProject = (id: string) => {
+    const p = projects.find(x => x.id === id);
+    if (!p) return;
     navigate(id);
-    showToast(`Opened ${fileName(projects.find(p => p.id === id)!)}`, 'info');
+    if (p.link) setLiveId(id);
+    showToast(`Opened ${fileName(p)}`, 'info');
   };
 
   const items = useMemo(() => {
@@ -85,8 +99,8 @@ export default function ProjectsApp({ onClose }: { onClose: () => void }) {
         kind: 'file' as const,
         id: p.id,
         name: fileName(p),
-        sub: `${p.category === 'game' ? 'Game' : 'Web app'} · ${p.tech.length} technologies`,
-        icon: p.category === 'game' ? '🎮' : '🌐',
+        sub: `${categoryLabel(p.category)} · ${p.tech.length} technologies`,
+        icon: categoryIcon(p.category),
       }));
   }, [view, query, currentProject]);
 
@@ -95,11 +109,11 @@ export default function ProjectsApp({ onClose }: { onClose: () => void }) {
   };
 
   if (liveProject) {
-    return <LiveView project={liveProject} onBack={() => setLiveId(null)} onClose={onClose} />;
+    return <LiveView project={liveProject} onBack={() => setLiveId(null)} />;
   }
 
   if (currentProject) {
-    return <ProjectDetail project={currentProject} onBack={back} onClose={onClose} openExternal={openExternal} onLive={() => setLiveId(currentProject.id)} />;
+    return <ProjectDetail project={currentProject} onBack={back} openExternal={openExternal} />;
   }
 
   const crumbs: { label: string; target: View }[] = [{ label: 'Projects', target: 'root' }];
@@ -152,12 +166,6 @@ export default function ProjectsApp({ onClose }: { onClose: () => void }) {
           />
           <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-600" />
         </div>
-        <button
-          onClick={onClose}
-          className="w-8 h-8 rounded-md flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-all"
-        >
-          <X size={14} />
-        </button>
       </div>
 
       {/* Content */}
@@ -213,14 +221,24 @@ export default function ProjectsApp({ onClose }: { onClose: () => void }) {
   );
 }
 
-function LiveView({ project, onBack, onClose }: {
+function LiveView({ project, onBack }: {
   project: Project;
   onBack: () => void;
-  onClose: () => void;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const url = project.liveUrl || '';
+  const [autoOpened, setAutoOpened] = useState(false);
+  const url = project.link || '';
+
+  useEffect(() => {
+    if (!url || loaded || failed) return;
+    const t = setTimeout(() => {
+      setFailed(true);
+      window.open(url, '_blank');
+      setAutoOpened(true);
+    }, 12000);
+    return () => clearTimeout(t);
+  }, [url, loaded, failed]);
 
   return (
     <div className="flex flex-col h-full bg-[#1e1e1e]">
@@ -243,12 +261,6 @@ function LiveView({ project, onBack, onClose }: {
         >
           <ExternalLink size={11} /> New Tab
         </button>
-        <button
-          onClick={onClose}
-          className="w-8 h-8 rounded-md flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-all"
-        >
-          <X size={14} />
-        </button>
       </div>
 
       {/* Viewport */}
@@ -261,16 +273,18 @@ function LiveView({ project, onBack, onClose }: {
         )}
         {failed && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#1e1e1e] p-8 text-center">
-            <span className="text-3xl mb-2">⚠️</span>
-            <h3 className="text-sm font-semibold text-gray-200">This site can't be embedded</h3>
+            <span className="text-3xl mb-2">{autoOpened ? '🔗' : '⚠️'}</span>
+            <h3 className="text-sm font-semibold text-gray-200">{autoOpened ? 'Opened in a new tab' : "This site can't be embedded"}</h3>
             <p className="text-xs text-gray-500 max-w-sm">
-              {new URL(url).hostname} blocks being displayed inside other pages (X-Frame-Options).
+              {autoOpened
+                ? `${new URL(url).hostname} took too long to embed, so it was opened in a new tab.`
+                : `${new URL(url).hostname} blocks being displayed inside other pages (X-Frame-Options).`}
             </p>
             <button
               onClick={() => window.open(url, '_blank')}
               className="mt-2 flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#863bff] text-white text-xs font-medium hover:bg-[#954dff] transition-colors"
             >
-              <ExternalLink size={12} /> Open in new tab
+              <ExternalLink size={12} /> {autoOpened ? 'Re-open in new tab' : 'Open in new tab'}
             </button>
           </div>
         )}
@@ -293,12 +307,10 @@ function LiveView({ project, onBack, onClose }: {
   );
 }
 
-function ProjectDetail({ project, onBack, onClose, openExternal, onLive }: {
+function ProjectDetail({ project, onBack, openExternal }: {
   project: Project;
   onBack: () => void;
-  onClose: () => void;
   openExternal: (url?: string) => void;
-  onLive: () => void;
 }) {
   return (
     <div className="flex flex-col h-full bg-[#0b0b16]">
@@ -310,20 +322,12 @@ function ProjectDetail({ project, onBack, onClose, openExternal, onLive }: {
         >
           <ArrowLeft size={15} />
         </button>
-        <span className="text-lg">{project.category === 'game' ? '🎮' : '🌐'}</span>
+        <span className="text-lg">{categoryIcon(project.category)}</span>
         <div className="min-w-0">
           <h2 className="text-xs font-semibold text-gray-200 truncate">{fileName(project)}</h2>
           <p className="text-[10px] text-gray-500 truncate">{project.name} — {project.shortDescription}</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          {project.liveUrl && (
-            <button
-              onClick={onLive}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#863bff]/15 text-[#c084fc] text-[11px] font-medium hover:bg-[#863bff]/25 transition-colors border border-[#863bff]/30"
-            >
-              <ExternalLink size={11} /> Open Live Site
-            </button>
-          )}
           {project.githubUrl && project.githubUrl !== '#' && (
             <button
               onClick={() => openExternal(project.githubUrl)}
@@ -332,12 +336,6 @@ function ProjectDetail({ project, onBack, onClose, openExternal, onLive }: {
               GitHub
             </button>
           )}
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-md flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-all"
-          >
-            <X size={14} />
-          </button>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -346,9 +344,10 @@ function ProjectDetail({ project, onBack, onClose, openExternal, onLive }: {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blood/20 to-red-950/40 border border-blood/20 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blood/10">
-                <span className="text-3xl">{project.category === 'game' ? '🎮' : '🌐'}</span>
+                <span className="text-3xl">{categoryIcon(project.category)}</span>
               </div>
               <h1 className="text-xl font-bold text-white mb-2">{project.name}</h1>
+              <p className="text-xs text-blood/80 mb-2 font-medium">{project.role}{project.year ? ` · ${project.year}` : ''}</p>
               <p className="text-sm text-gray-400 max-w-md mx-auto px-6">{project.description}</p>
             </div>
           </div>

@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { X } from 'lucide-react';
 
 const DIVIDER = '─'.repeat(45);
 
-export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void; onLaunch: (id: string) => void }) {
+export default function TerminalApp({ onLaunch }: { onClose: () => void; onLaunch: (id: string) => void }) {
   const [lines, setLines] = useState<string[]>([
     '',
     '  obyead-pc ~ Terminal v4.0',
@@ -132,9 +131,6 @@ export default function TerminalApp({ onClose, onLaunch }: { onClose: () => void
       <div className="flex items-center justify-between px-3 py-2 border-b border-white/10"
         style={{ background: '#0a0a1a' }}>
         <span className="text-[11px]">Terminal v4.0</span>
-        <button onClick={onClose} className="w-6 h-6 rounded-md flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors">
-          <X size={14} />
-        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 text-xs">

@@ -1,11 +1,10 @@
-import { X, Monitor, Palette, Bell, Volume2, Wifi, Shield } from 'lucide-react';
+import { Monitor, Palette, Bell, Volume2, Wifi, Shield } from 'lucide-react';
 
-export default function SettingsApp({ onClose }: { onClose: () => void }) {
+export default function SettingsApp(_props: { onClose: () => void }) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-red-900/20 bg-black/20">
+      <div className="flex items-center px-3 py-2 border-b border-red-900/20 bg-black/20">
         <span className="text-[11px] text-gray-500">Settings</span>
-        <button onClick={onClose} className="w-6 h-6 rounded-md flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-950/30 transition-colors"><X size={14} /></button>
       </div>
       <div className="flex flex-1 overflow-hidden">
         <div className="w-40 border-r border-red-900/10 bg-black/15 p-2">

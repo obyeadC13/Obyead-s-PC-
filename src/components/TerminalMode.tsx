@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
-import { aboutMe, projects } from '../data/projects';
+import { profile, experience } from '../data/cv';
+import { projects } from '../data/projects';
 import AsteroidGame from './AsteroidGame';
 import SpaceBackground from './SpaceBackground';
 import GlitchOverlay from './GlitchOverlay';
@@ -52,12 +53,14 @@ const COMMANDS_BLOCK = `
 
   about       [▸] Who am I?
   projects    [▸] View all projects
-  web         [▸] View web projects
+  web         [▸] View web / freelance work
+  client      [▸] View client work
   games       [▸] View game projects
   play        [▸] Play Asteroid Destroyer
+  project <n> [▸] Full details for one project (name or #)
   clear       [▸] Clear terminal
   reboot      [▸] Switch to GUI mode
-`;
+  `;
 
 const WELCOME_TEXT = `
   Welcome to Obyead's Portfolio
@@ -103,47 +106,96 @@ export default function TerminalMode() {
     setCmdHistory(prev => [...prev, cmd]);
     setHistoryIndex(-1);
 
-    switch (trimmed) {
-      case 'help':
-        output.push(COMMANDS_BLOCK);
+  const printProjects = (list: typeof projects, header: string) => {
+    const out: string[] = [`  ${header}`, '  ' + DIVIDER];
+    list.forEach((p: any, i: number) => {
+      out.push(`  ▸ ${i + 1}. ${p.name}  [${p.year || '—'}]`);
+      out.push(`    ${p.description}`);
+      out.push(`    Role:    ${p.role}`);
+      out.push(`    Tech:    ${p.tech.join(' │ ')}`);
+      if (p.link) out.push(`    Live:    ${p.link}`);
+      if (p.githubUrl && p.githubUrl !== 'https://github.com/OO13Sp') out.push(`    Code:    ${p.githubUrl}`);
+      out.push('');
+    });
+    if (list.length === 0) out.push('  (none found)', '');
+    return out;
+  };
+
+  const isClient = (id: string) => ['stratford-salon', 'fat-ink', 'odyssey'].includes(id);
+
+  switch (trimmed) {
+    case 'help':
+      output.push(COMMANDS_BLOCK);
+      break;
+    case 'about':
+      output.push('  ' + profile.name.toUpperCase() + ' // ' + profile.title.toUpperCase());
+      output.push('  ' + DIVIDER);
+      output.push('');
+      output.push('  ' + profile.location);
+      output.push('  ' + profile.email + '  |  ' + profile.phone);
+      output.push('  ' + profile.website);
+      output.push('  ' + profile.github + '  |  ' + profile.linkedin);
+      output.push('');
+      output.push('  CURRENT WORK');
+      output.push('  ' + DIVIDER);
+      output.push(...experience.slice(0, 2).map(x => `  ▸ ${x.role} — ${x.company} (${x.period})`));
+      output.push('');
+      break;
+    case 'web':
+        output.push(...printProjects(projects.filter(p => p.category === 'web' && !isClient(p.id)), '🌐 WEB & FREELANCE PROJECTS'));
         break;
-      case 'about':
-        output.push('  OBYEAD // SYSOP');
-        output.push('  ' + DIVIDER);
-        output.push('');
-        output.push(...aboutMe.split('\n').map((line: string) => `  ${line}`));
-        output.push('');
-        break;
-      case 'web':
-        output.push('  🌐 WEB DEVELOPMENT');
-        output.push('  ' + DIVIDER);
-        projects.filter((p: any) => p.category === 'web').forEach((p: any, i: number) => {
-          output.push(`  ▸ ${i + 1}. ${p.name}`);
-          output.push(`    ${p.shortDescription}`);
-          output.push(`    └─ [ ${p.tech.join(' │ ')} ]`);
-          output.push('');
-        });
+      case 'client':
+        output.push(...printProjects(projects.filter(p => isClient(p.id)), '🤝 CLIENT WORK'));
         break;
       case 'games':
-        output.push('  🎮 GAME DEVELOPMENT');
-        output.push('  ' + DIVIDER);
-        projects.filter((p: any) => p.category === 'game').forEach((p: any, i: number) => {
-          output.push(`  ▸ ${i + 1}. ${p.name}`);
-          output.push(`    ${p.shortDescription}`);
-          output.push(`    └─ [ ${p.tech.join(' │ ')} ]`);
-          output.push('');
-        });
+        output.push(...printProjects(projects.filter(p => p.category === 'game'), '🎮 GAMES'));
         break;
       case 'projects':
-        output.push('  ALL PROJECTS // SYSTEM OVERVIEW');
-        output.push('  ' + DIVIDER);
-        projects.forEach((p: any) => {
-          const cat = p.category === 'web' ? '🌐' : p.category === 'game' ? '🎮' : '📦';
-          output.push(`  ${cat} ${p.name}${p.featured ? ' ★' : ''}`);
-          output.push(`    ${p.shortDescription}`);
-          output.push('');
-        });
+        output.push(...printProjects(projects, '▓▓ ALL PROJECTS // SYSTEM OVERVIEW'));
+        output.push('  ▸ Run "project <# or name>" for full details on one.');
         break;
+      case 'project': {
+        const arg = trimmed.split(/\s+/).slice(1).join(' ');
+        if (!arg) {
+          output.push('  usage: project <number or name>  (e.g. "project 3" or "project snowy")');
+          output.push('');
+          break;
+        }
+        let match = projects.find(p => p.name.toLowerCase().includes(arg.toLowerCase()));
+        if (!match && /^\d+$/.test(arg)) match = projects[parseInt(arg, 10) - 1];
+        if (!match) {
+          output.push(`  ⚠ No project matching "${arg}"`);
+          output.push('');
+          break;
+        }
+        output.push('  ' + DIVIDER);
+        output.push(`  ▸ ${match.name}  [${match.year || '—'}]`);
+        output.push('  ' + DIVIDER);
+        output.push(`  ${match.description}`);
+        output.push('');
+        output.push(`  Role:        ${match.role}`);
+        output.push(`  Category:    ${match.category}${match.featured ? '  (featured ★)' : ''}`);
+        output.push(`  Tech:        ${match.tech.join(' │ ')}`);
+        if (match.link) output.push(`  Live:        ${match.link}`);
+        if (match.githubUrl && match.githubUrl !== 'https://github.com/OO13Sp') output.push(`  Code:        ${match.githubUrl}`);
+        output.push('');
+        output.push('  OVERVIEW');
+        output.push('  ' + match.overview);
+        output.push('');
+        output.push('  PROBLEM');
+        output.push('  ' + match.problem);
+        output.push('  SOLUTION');
+        output.push('  ' + match.solution);
+        output.push('');
+        output.push('  KEY FEATURES');
+        match.keyFeatures.forEach(f => output.push(`    · ${f}`));
+        output.push('  CHALLENGES');
+        match.challenges.forEach(f => output.push(`    · ${f}`));
+        output.push('  LEARNINGS');
+        match.learnings.forEach(f => output.push(`    · ${f}`));
+        output.push('');
+        break;
+      }
       case 'play':
         setPlayingGame(true);
         setHistory(['']);
@@ -157,7 +209,7 @@ export default function TerminalMode() {
         setTimeout(() => switchMode(), 1000);
         break;
       case 'whoami':
-        output.push('  obyead // developer, game maker, writer');
+        output.push('  ' + profile.name.toLowerCase() + ' // ' + profile.title.toLowerCase());
         output.push('  clearance: LEVEL-5');
         output.push('  status: ACTIVE');
         output.push('');

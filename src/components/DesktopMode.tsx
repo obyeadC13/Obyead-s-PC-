@@ -107,6 +107,14 @@ export default function DesktopMode() {
           {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
         </div>
         <div className="flex items-center gap-3 text-gray-400">
+          <button
+            onClick={ctx.switchMode}
+            className="flex items-center gap-1.5 text-xs rounded-md px-2 py-1 transition-colors hover:text-neon-cyan hover:bg-neon-cyan/10"
+            title="Switch to full terminal mode"
+          >
+            <span style={{ textShadow: '0 0 8px #00f0ff66' }}>{'> _'}</span>
+            <span>Terminal</span>
+          </button>
           <span className="text-xs">🔋 82%</span>
           <span className="text-xs">📶</span>
         </div>

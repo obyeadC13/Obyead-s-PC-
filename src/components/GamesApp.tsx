@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 const games = [
   { name: 'Terminal 13', genre: 'Detective Mystery', engine: 'Astro + React', status: 'Released', desc: 'Interactive detective mystery game with terminal-style UI, evidence investigation, and deduction mechanics.', link: 'https://terminal13.vercel.app' },
   { name: 'Project 13', genre: 'Action / Platformer', engine: 'Canvas API', status: 'In Development', desc: '2D game with custom engine and hand-crafted pixel art levels.', link: '#' },
-  { name: 'Super Swipe', genre: 'Card Game', engine: 'React + WebSocket', status: 'Concept', desc: 'Fast-paced digital card game with swipe mechanics, competitive rankings, and deck building.', link: '#' },
+  { name: 'Super Swipe', genre: 'Swipe Game', engine: 'React + Tailwind', status: 'Released', desc: 'Fast, gesture-driven interactive game — swipe-based gameplay with instant feedback, deployed on its own domain.', link: 'https://super-swipe.com/' },
 ];
 
 export default function GamesApp({ onClose }: { onClose: () => void }) {
