@@ -75,8 +75,8 @@ export default function AboutApp(_props: { onClose: () => void }) {
                 className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5 hover:border-blood/30 hover:bg-blood/[0.02] transition-all text-left">
                 <Globe size={16} className="text-gray-500" />
                 <div className="flex-1">
-                  <p className="text-sm text-gray-300">obyeadsworld.netlify.app</p>
-                  <p className="text-[10px] text-gray-500">My website</p>
+                  <p className="text-sm text-gray-300">{profile.website.replace('https://', '')}</p>
+                  <p className="text-[10px] text-gray-500">My portfolio — Obyead's PC</p>
                 </div>
                 <ExternalLink size={14} className="text-gray-600 hover:text-blood transition-colors" />
               </a>

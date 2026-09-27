@@ -71,7 +71,7 @@ export default function ContactApp(_props: { onClose: () => void }) {
           <a href={profile.website} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5 hover:border-blood/30 hover:bg-blood/[0.02] transition-all text-left">
             <Globe size={14} className="text-gray-500" />
-            <span className="text-sm text-gray-300 flex-1">obyeadsworld.netlify.app</span>
+            <span className="text-sm text-gray-300 flex-1">{profile.website.replace('https://', '')}</span>
             <ExternalLink size={14} className="text-gray-600 group-hover:text-blood transition-colors" />
           </a>
           <a href={profile.github} target="_blank" rel="noopener noreferrer"

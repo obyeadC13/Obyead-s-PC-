@@ -6,7 +6,7 @@ export const profile = {
   location: 'Dhaka, Bashundahara',
   phone: '(+88) 017-2006-1723',
   email: 'obyead@gmail.com',
-  website: 'https://obyeadsworld.netlify.app',
+  website: 'https://obyead-s-pc.vercel.app/',
   github: 'https://github.com/OO13Sp',
   githubHandle: 'OO13Sp',
   linkedin: 'https://www.linkedin.com/in/md-obyead-a70749259',
@@ -110,9 +110,9 @@ export const projects = [
   },
   {
     name: "Obyead's World",
-    role: 'Portfolio',
+    role: 'Personal Website',
     year: '2024',
-    bullets: ['Developed the portfolio using React.js and Vanilla JavaScript.'],
+    bullets: ['Developed the website using React.js and Vanilla JavaScript.'],
     link: 'https://obyeadsworld.netlify.app',
   },
   {
