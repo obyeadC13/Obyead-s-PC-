@@ -113,7 +113,7 @@ export default function BootScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-term-bg text-term-green font-mono flex flex-col items-center justify-start pt-12 p-4 relative overflow-hidden">
+    <div className="h-screen bg-term-bg text-term-green font-mono flex flex-col items-center justify-start pt-4 sm:pt-12 p-4 relative overflow-hidden">
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none z-10 opacity-[0.03]"
         style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)' }} />
@@ -126,9 +126,9 @@ export default function BootScreen() {
         }} />
 
       {/* ASCII Art - centered and up top */}
-      <div className="w-full flex justify-center relative z-20" style={{ marginTop: '40px' }}>
+      <div className="w-full flex justify-center relative z-20 mt-0 sm:mt-10">
         {asciiDone && (
-          <pre className="text-[5px] sm:text-[6px] leading-[5px] sm:leading-[6px] text-neon-cyan select-none whitespace-pre"
+          <pre className="text-[2.5px] leading-[2.5px] sm:text-[6px] sm:leading-[6px] text-neon-cyan select-none whitespace-pre"
             style={{ textShadow: '0 0 8px #00f0ff66, 0 0 20px #00f0ff33', flexShrink: 0, overflow: 'visible' }}>
             {BOOT_ASCII}
           </pre>
@@ -136,8 +136,8 @@ export default function BootScreen() {
       </div>
 
       {/* Boot lines below the art */}
-      <div className="w-full max-w-2xl mt-6 relative z-20">
-        <div className="mb-6 text-sm">
+      <div className="w-full max-w-2xl mt-3 sm:mt-6 relative z-20">
+        <div className="mb-4 sm:mb-6 text-[11px] sm:text-sm">
           {lines.slice(asciiDone ? BOOT_ART_LINES.length : 0).map((line, i) => (
             <div key={i} className="animate-boot" style={{ animationDelay: `${i * 0.05}s` }}>
               {line.startsWith('>') ? (
@@ -172,43 +172,43 @@ export default function BootScreen() {
         </div>
 
         {showOptions && (
-          <div className="animate-fadeIn text-center space-y-6">
-            <div className="text-neon-cyan text-sm tracking-[0.3em] uppercase font-bold"
+          <div className="animate-fadeIn text-center space-y-4 sm:space-y-6">
+            <div className="text-neon-cyan text-[11px] sm:text-sm tracking-[0.3em] uppercase font-bold"
               style={{ textShadow: '0 0 10px #00f0ff88, 0 0 30px #00f0ff44' }}>
               ═══ Select Boot Mode ═══
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center">
               <button
                 onClick={() => handleBoot('terminal')}
-                className="group relative px-10 py-5 bg-transparent border-2 border-term-green text-term-green font-mono text-lg tracking-wider hover:bg-term-green/10 transition-all duration-300"
+                className="group relative px-5 py-3 sm:px-10 sm:py-5 bg-transparent border-2 border-term-green text-term-green font-mono text-sm sm:text-lg tracking-wider hover:bg-term-green/10 transition-all duration-300"
                 style={{
                   boxShadow: '0 0 15px #4da6ff44, inset 0 0 15px #4da6ff22',
                 }}
               >
-                <div className="text-2xl mb-2" style={{ textShadow: '0 0 10px #4da6ff88' }}>{`> _`}</div>
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2" style={{ textShadow: '0 0 10px #4da6ff88' }}>{`> _`}</div>
                 <div className="font-bold" style={{ textShadow: '0 0 8px #4da6ff66' }}>TERMINAL BOOT</div>
-                <div className="text-xs mt-2 text-term-dim group-hover:text-term-green transition-colors">
+                <div className="text-[10px] sm:text-xs mt-1 sm:mt-2 text-term-dim group-hover:text-term-green transition-colors">
                   ─ CLI INTERFACE ─
                 </div>
               </button>
 
               <button
                 onClick={() => handleBoot('gui')}
-                className="group relative px-10 py-5 bg-transparent border-2 border-neon-cyan text-neon-cyan font-mono text-lg tracking-wider hover:bg-neon-cyan/10 transition-all duration-300"
+                className="group relative px-5 py-3 sm:px-10 sm:py-5 bg-transparent border-2 border-neon-cyan text-neon-cyan font-mono text-sm sm:text-lg tracking-wider hover:bg-neon-cyan/10 transition-all duration-300"
                 style={{
                   boxShadow: '0 0 15px #00f0ff44, inset 0 0 15px #00f0ff22',
                 }}
               >
-                <div className="text-2xl mb-2" style={{ textShadow: '0 0 10px #00f0ff88' }}>◉ ◈ ◫</div>
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2" style={{ textShadow: '0 0 10px #00f0ff88' }}>◉ ◈ ◫</div>
                 <div className="font-bold" style={{ textShadow: '0 0 8px #00f0ff66' }}>GUI BOOT</div>
-                <div className="text-xs mt-2 text-desktop-muted group-hover:text-neon-cyan transition-colors">
+                <div className="text-[10px] sm:text-xs mt-1 sm:mt-2 text-desktop-muted group-hover:text-neon-cyan transition-colors">
                   ─ DESKTOP INTERFACE ─
                 </div>
               </button>
             </div>
 
-            <div className="text-term-dim text-xs animate-blink mt-5">
+            <div className="text-term-dim text-[10px] sm:text-xs animate-blink mt-2 sm:mt-5">
               {'>'} Select to initiate boot sequence ...
             </div>
           </div>
