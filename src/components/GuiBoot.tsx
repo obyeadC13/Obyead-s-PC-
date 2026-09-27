@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isMobile } from '../context/AppContext';
 
 const SERVICES = [
   { name: 'Window Manager (Compositor)', icon: '◉' },
@@ -56,7 +57,7 @@ export default function GuiBoot() {
         if (count > 12) {
           clearInterval(glitchInterval);
           setPhase('done');
-          timers.push(setTimeout(() => navigate('/gui'), 200));
+          timers.push(setTimeout(() => navigate(isMobile() ? '/mobile' : '/gui'), 200));
         }
       }, 60);
     }, doneDelay);

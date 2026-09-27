@@ -271,24 +271,24 @@ export default function TerminalMode() {
           <GlitchOverlay />
           <SpaceBackground />
           <div className="relative z-10 flex flex-col h-screen w-screen">
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 sm:p-4">
               {showWelcome && (
                 <div className="flex flex-col min-h-screen justify-between pb-8">
                   <div className="flex-1 flex items-center justify-center">
-                    <pre className="text-[10px] md:text-[13px] leading-none">
+                    <pre className="text-[8px] sm:text-[10px] md:text-[13px] leading-none">
                       {WELCOME_ART}
                     </pre>
                   </div>
                   <div className="flex justify-center mt-4 mb-4">
-                    <pre className="text-sm">{WELCOME_TEXT}</pre>
+                    <pre className="text-[13px] sm:text-sm">{WELCOME_TEXT}</pre>
                   </div>
-                  <div className="flex items-start pl-4">
-                    <pre className="text-sm">{COMMANDS_BLOCK}</pre>
+                  <div className="flex items-start pl-2 sm:pl-4">
+                    <pre className="text-[13px] sm:text-sm">{COMMANDS_BLOCK}</pre>
                   </div>
                 </div>
               )}
               {history.map((line: string, i: number) => (
-                <pre key={i} className="whitespace-pre-wrap leading-relaxed text-sm">
+                <pre key={i} className="whitespace-pre-wrap leading-relaxed text-[13px] sm:text-sm">
                   {line}
                 </pre>
               ))}
@@ -297,14 +297,14 @@ export default function TerminalMode() {
 
             <div className="border-t border-white/10 p-3" style={{ background: 'rgba(10,10,26,0.9)' }}>
               <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                <span className="shrink-0 text-sm font-medium">obyead@obyead-pc:~$</span>
+                <span className="shrink-0 text-[13px] sm:text-sm font-medium">obyead@obyead-pc:~$</span>
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent outline-none text-white text-sm caret-[#4da6ff]"
+                  className="flex-1 bg-transparent outline-none text-white text-[13px] sm:text-sm caret-[#4da6ff]"
                   autoFocus
                   autoComplete="off"
                   spellCheck={false}
