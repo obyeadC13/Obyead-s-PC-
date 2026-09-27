@@ -77,7 +77,7 @@ export default function ProjectsApp(_props: { onClose: () => void }) {
     const p = projects.find(x => x.id === id);
     if (!p) return;
     navigate(id);
-    if (p.link) setLiveId(id);
+    if (p.link && !isTouch()) setLiveId(id);
     showToast(`Opened ${fileName(p)}`, 'info');
   };
 
@@ -331,6 +331,14 @@ function ProjectDetail({ project, onBack, openExternal }: {
           <p className="text-[10px] text-gray-500 truncate">{project.name} — {project.shortDescription}</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
+          {project.link && (
+            <button
+              onClick={() => openExternal(project.link)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#863bff]/15 text-[#b78aff] text-[11px] hover:bg-[#863bff]/25 transition-colors border border-[#863bff]/30"
+            >
+              <ExternalLink size={12} /> Live Site
+            </button>
+          )}
           {project.githubUrl && project.githubUrl !== '#' && (
             <button
               onClick={() => openExternal(project.githubUrl)}
