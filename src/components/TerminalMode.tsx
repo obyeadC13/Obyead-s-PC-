@@ -262,7 +262,7 @@ export default function TerminalMode() {
 
   return (
     <div
-      className="h-screen w-screen flex flex-col font-mono"
+      className="h-[100dvh] w-screen flex flex-col font-mono overflow-hidden"
       style={{ background: '#0a0a1a', color: '#4da6ff' }}
       onClick={handleClick}
     >
@@ -272,20 +272,20 @@ export default function TerminalMode() {
         <>
           <GlitchOverlay />
           <SpaceBackground />
-          <div className="relative z-10 flex flex-col h-screen w-screen">
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 sm:p-4">
+          <div className="relative z-10 flex flex-col h-[100dvh]">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 sm:p-4 no-scrollbar">
               {showWelcome && (
-                <div className="flex flex-col min-h-screen justify-between pb-8">
+                <div className="flex flex-col h-full justify-between pb-4">
                   <div className="flex-1 flex items-center justify-center">
-                    <pre className="text-[8px] sm:text-[10px] md:text-[13px] leading-none">
+                    <pre className="text-[6px] sm:text-[10px] md:text-[13px] leading-none">
                       {WELCOME_ART}
                     </pre>
                   </div>
-                  <div className="flex justify-center mt-4 mb-4">
-                    <pre className="text-[13px] sm:text-sm">{WELCOME_TEXT}</pre>
+                  <div className="flex justify-center mt-3 mb-3">
+                    <pre className="text-[12px] sm:text-sm">{WELCOME_TEXT}</pre>
                   </div>
-                  <div className="flex items-start pl-2 sm:pl-4">
-                    <pre className="text-[13px] sm:text-sm">{COMMANDS_BLOCK}</pre>
+                  <div className="flex items-start pl-1 sm:pl-4">
+                    <pre className="text-[12px] sm:text-sm">{COMMANDS_BLOCK}</pre>
                   </div>
                 </div>
               )}
@@ -294,7 +294,6 @@ export default function TerminalMode() {
                   {line}
                 </pre>
               ))}
-              <div className="h-4" />
             </div>
 
             <div className="border-t border-white/10 p-3" style={{ background: 'rgba(10,10,26,0.9)' }}>

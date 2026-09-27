@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import Starfield from './Starfield';
@@ -21,7 +22,7 @@ const APPS = [
   { id: 'terminal', name: 'Terminal', icon: '⬛' },
 ];
 
-function StatusBar({ time }: { time: Date }) {
+function StatusBar({ time, onTerminal }: { time: Date; onTerminal: () => void }) {
   return (
     <div
       className="absolute top-0 left-0 right-0 h-7 z-[500] flex items-center justify-between px-4 text-[11px] font-medium"
@@ -37,8 +38,16 @@ function StatusBar({ time }: { time: Date }) {
         <div className="flex-1 h-1.5 rounded-[1px] bg-green-400" />
         <div className="w-[2px] h-1.5 rounded-r-[1px] bg-white/30" />
       </div>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         <span className="text-[10px]">📶</span>
+        <button
+          onClick={onTerminal}
+          className="flex items-center gap-1 px-2 h-5 rounded-md text-[11px] font-mono transition-colors active:bg-white/10 hover:bg-white/10"
+          style={{ color: '#4da6ff', textShadow: '0 0 8px #4da6ff66' }}
+          title="Switch to terminal mode"
+        >
+          {'> _'}
+        </button>
       </div>
     </div>
   );
@@ -179,6 +188,7 @@ function NavBar({ onBack, onHome, onSwitcher, appOpen }: {
 }
 
 export default function MobileMode() {
+  const navigate = useNavigate();
   const [time, setTime] = useState(new Date());
   const [openId, setOpenId] = useState<string | null>(null);
   const [switcher, setSwitcher] = useState(false);
@@ -195,7 +205,7 @@ export default function MobileMode() {
       <div className="absolute inset-0 z-[1] bg-[#05070d]/40" />
       <div className="absolute inset-0 z-[2] pointer-events-none" style={{ opacity: 0.8 }}><Starfield /></div>
 
-      <StatusBar time={time} />
+      <StatusBar time={time} onTerminal={() => navigate('/boot/terminal')} />
 
       <AnimatePresence mode="wait">
         {openId
