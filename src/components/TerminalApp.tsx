@@ -133,13 +133,12 @@ export default function TerminalApp({ onLaunch }: { onClose: () => void; onLaunc
         <span className="text-[11px]">Terminal v4.0</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 text-xs">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 text-xs">
         {lines.map((line: string, i: number) => (
           <pre key={i} className="whitespace-pre-wrap leading-relaxed">
             {line}
           </pre>
         ))}
-        <div ref={scrollRef} />
         <div className="h-2" />
       </div>
 
