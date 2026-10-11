@@ -10,6 +10,7 @@ import AppWindow from './AppWindow';
 import ProjectsApp from './ProjectsApp';
 import AboutApp from './AboutApp';
 import SkillsApp from './SkillsApp';
+import WriterApp from './WriterApp';
 import TerminalApp from './TerminalApp';
 import ContactApp from './ContactApp';
 import ResumeApp from './ResumeApp';
@@ -21,6 +22,7 @@ const desktopIcons = [
   { id: 'projects', name: 'Projects', icon: '📁' },
   { id: 'about', name: 'About', icon: '👤' },
   { id: 'skills', name: 'Skills', icon: '⚡' },
+  { id: 'writer', name: 'Writer', icon: '📝' },
   { id: 'terminal', name: 'Terminal', icon: '⬛' },
   { id: 'resume', name: 'Resume.pdf', icon: '📄' },
   { id: 'contact', name: 'Contact', icon: '✉️' },
@@ -31,6 +33,7 @@ const appMeta: Record<string, { title: string; icon: string; w: number; h: numbe
   projects: { title: 'My Projects', icon: '📁', w: 880, h: 600 },
   about: { title: 'About Me', icon: '👤', w: 520, h: 500 },
   skills: { title: 'Skills', icon: '⚡', w: 820, h: 620 },
+  writer: { title: 'Writer', icon: '📝', w: 620, h: 600 },
   terminal: { title: 'Terminal', icon: '⬛', w: 640, h: 440 },
   resume: { title: 'Resume.pdf', icon: '📄', w: 660, h: 540 },
   contact: { title: 'Contact', icon: '✉️', w: 500, h: 500 },
@@ -65,6 +68,7 @@ export default function DesktopMode() {
       case 'projects': return <ProjectsApp onClose={close} />;
       case 'about': return <AboutApp onClose={close} />;
       case 'skills': return <SkillsApp />;
+      case 'writer': return <WriterApp />;
       case 'terminal': return <TerminalApp onClose={close} onLaunch={launch} />;
       case 'resume': return <ResumeApp onClose={close} />;
       case 'contact': return <ContactApp onClose={close} />;

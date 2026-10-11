@@ -41,6 +41,7 @@ export default function TerminalApp({ onLaunch }: { onClose: () => void; onLaunc
     if (trimmed === 'about') { onLaunch('about'); output.push('  ▸ Opening About ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
     if (trimmed === 'contact') { onLaunch('contact'); output.push('  ▸ Opening Contact ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
     if (trimmed === 'skills') { onLaunch('skills'); output.push('  ▸ Opening Skills ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
+    if (trimmed === 'writer') { onLaunch('writer'); output.push('  ▸ Opening Writer ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
     if (trimmed === 'resume') { onLaunch('resume'); output.push('  ▸ Opening Resume ...'); setLines(prev => [...prev, ...output]); setInput(''); return; }
 
     switch (trimmed) {
@@ -50,6 +51,7 @@ export default function TerminalApp({ onLaunch }: { onClose: () => void; onLaunc
         output.push('  projects    [▸] Open Projects window');
         output.push('  about       [▸] Open About window');
         output.push('  skills      [▸] Open Skills window');
+        output.push('  writer      [▸] Open Writer window');
         output.push('  contact     [▸] Open Contact window');
         output.push('  resume      [▸] Open Resume');
         output.push('  whoami      [▸] Current user info');

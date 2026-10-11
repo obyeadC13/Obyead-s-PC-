@@ -6,6 +6,7 @@ import Starfield from './Starfield';
 import ProjectsApp from './ProjectsApp';
 import AboutApp from './AboutApp';
 import SkillsApp from './SkillsApp';
+import WriterApp from './WriterApp';
 import TerminalApp from './TerminalApp';
 import ContactApp from './ContactApp';
 import ResumeApp from './ResumeApp';
@@ -16,6 +17,7 @@ const APPS = [
   { id: 'projects', name: 'Projects', icon: '📁' },
   { id: 'about', name: 'About', icon: '👤' },
   { id: 'skills', name: 'Skills', icon: '⚡' },
+  { id: 'writer', name: 'Writer', icon: '📝' },
   { id: 'contact', name: 'Contact', icon: '✉️' },
   { id: 'resume', name: 'Resume', icon: '📄' },
   { id: 'browser', name: 'Browser', icon: '🌐' },
@@ -148,6 +150,7 @@ function OpenApp({ id, onClose }: { id: string; onClose: () => void }) {
     case 'projects': return <ProjectsApp onClose={onClose} />;
     case 'about': return <AboutApp onClose={onClose} />;
     case 'skills': return <SkillsApp />;
+    case 'writer': return <WriterApp />;
     case 'contact': return <ContactApp onClose={onClose} />;
     case 'resume': return <ResumeApp onClose={onClose} />;
     case 'browser': return <BrowserApp onClose={onClose} />;

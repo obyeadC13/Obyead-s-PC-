@@ -56,6 +56,7 @@ const COMMANDS_BLOCK = `
   web         [▸] View web / freelance work
   client      [▸] View client work
   games       [▸] View game projects
+  writer      [▸] View writing experience
   play        [▸] Play Asteroid Destroyer
   project <n> [▸] Full details for one project (name or #)
   clear       [▸] Clear terminal
@@ -72,7 +73,7 @@ const DIVIDER = '─'.repeat(55);
 export default function TerminalMode() {
   const { switchMode } = useApp();
   const [history, setHistory] = useState<string[]>([]);
-  const [showWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [playingGame, setPlayingGame] = useState(false);
   const [input, setInput] = useState('');
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
@@ -105,6 +106,7 @@ export default function TerminalMode() {
 
     setCmdHistory(prev => [...prev, cmd]);
     setHistoryIndex(-1);
+    setShowWelcome(false);
 
   const printProjects = (list: typeof projects, header: string) => {
     const out: string[] = [`  ${header}`, '  ' + DIVIDER];
@@ -151,6 +153,17 @@ export default function TerminalMode() {
         break;
       case 'games':
         output.push(...printProjects(projects.filter(p => p.category === 'game'), '🎮 GAMES'));
+        break;
+    case 'writer':
+    case 'writing':
+        output.push('  📝 WRITING EXPERIENCE');
+        output.push('  ' + DIVIDER);
+        experience.filter(e => ['AP2T Labs', 'GameRiv'].includes(e.company)).forEach(e => {
+          output.push(`  ▸ ${e.role} — ${e.company} (${e.period})`);
+          output.push(`    ${e.location}`);
+          e.bullets.forEach(b => output.push(`    · ${b}`));
+          output.push('');
+        });
         break;
       case 'projects':
         output.push(...printProjects(projects, '▓▓ ALL PROJECTS // SYSTEM OVERVIEW'));
