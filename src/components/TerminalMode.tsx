@@ -56,12 +56,15 @@ const COMMANDS_BLOCK = `
   web         [▸] View web / freelance work
   client      [▸] View client work
   games       [▸] View game projects
-  writer      [▸] View writing experience
-  play        [▸] Play Asteroid Destroyer
-  project <n> [▸] Full details for one project (name or #)
-  clear       [▸] Clear terminal
-  reboot      [▸] Switch to GUI mode
-  `;
+   writer      [▸] View writing experience
+   play        [▸] Play Asteroid Destroyer
+   project <n> [▸] Full details for one project (name or #)
+   whoami      [▸] Current user info
+   date        [▸] System time
+   start       [▸] Start exploring
+   clear       [▸] Clear terminal
+   reboot      [▸] Switch to GUI mode
+   `;
 
 const WELCOME_TEXT = `
   Welcome to Obyead's Portfolio

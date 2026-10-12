@@ -12,7 +12,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/md-obyead-a70749259',
   cvUrl: '/resume/CV-2026.pdf',
   currentFocus:
-    'Marketing Content Head at AP2T Labs and Junior Developer at Lorem Ipsum Dev — building front-end experiences with React, Remix and TypeScript while completing an M.S. in IT.',
+    'Junior Developer at Lorem Ipsum Dev and Marketing Content Head at AP2T Labs — building front-end experiences with React, Remix and TypeScript while completing an M.S. in IT.',
 };
 
 export const education = [
@@ -147,6 +147,20 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
+    company: 'Lorem Ipsum Dev',
+    location: 'Cincinnati, Ohio, USA',
+    role: 'Junior Developer',
+    period: 'September 2024 – Current',
+    bullets: [
+      'Developed responsive user interfaces and interactive features using React and TypeScript.',
+      'Created and maintained reusable components and styles using Tailwind CSS and vanilla JavaScript.',
+      'Built and integrated front-end components with backend APIs using Remix for seamless data flow.',
+      'Implemented TypeScript for robust type checking and improved code quality across projects.',
+      'Collaborated with the design team to ensure adherence to UI/UX principles and accessibility standards.',
+      'Participated in code reviews and contributed to the improvement of best practices in front-end development.',
+    ],
+  },
+  {
     company: 'AP2T Labs',
     location: 'Cincinnati, Ohio, USA',
     role: 'Marketing Content Head',
@@ -159,20 +173,6 @@ export const experience: ExperienceEntry[] = [
       'Focused on creating content that effectively conveys product benefits and differentiates the brand in a competitive market.',
       'Led content audits to maintain quality and relevance, optimizing messaging for audience engagement and retention.',
       'Collaborated with design and product teams to ensure content aligns with brand aesthetics and user experience (UX) standards.',
-    ],
-  },
-  {
-    company: 'Lorem Ipsum Dev',
-    location: 'Cincinnati, Ohio, USA',
-    role: 'Junior Developer',
-    period: 'September 2024 – Current',
-    bullets: [
-      'Developed responsive user interfaces and interactive features using React and TypeScript.',
-      'Created and maintained reusable components and styles using Tailwind CSS and vanilla JavaScript.',
-      'Built and integrated front-end components with backend APIs using Remix for seamless data flow.',
-      'Implemented TypeScript for robust type checking and improved code quality across projects.',
-      'Collaborated with the design team to ensure adherence to UI/UX principles and accessibility standards.',
-      'Participated in code reviews and contributed to the improvement of best practices in front-end development.',
     ],
   },
   {
