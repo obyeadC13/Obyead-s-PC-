@@ -58,17 +58,14 @@ const COMMANDS_BLOCK = `
   games       [▸] View game projects
    writer      [▸] View writing experience
    play        [▸] Play Asteroid Destroyer
-   project <n> [▸] Full details for one project (name or #)
-   whoami      [▸] Current user info
-   date        [▸] System time
-   start       [▸] Start exploring
-   clear       [▸] Clear terminal
-   reboot      [▸] Switch to GUI mode
-   `;
+  project <n> [▸] Full details for one project (name or #)
+  clear       [▸] Clear terminal
+  reboot      [▸] Switch to GUI mode
+  `;
 
 const WELCOME_TEXT = `
   Welcome to Obyead's Portfolio
-  Type "help" to explore or "start" to begin
+  Type "help" to explore
 `;
 
 const DIVIDER = '─'.repeat(55);
@@ -76,7 +73,7 @@ const DIVIDER = '─'.repeat(55);
 export default function TerminalMode() {
   const { switchMode } = useApp();
   const [history, setHistory] = useState<string[]>([]);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome] = useState(true);
   const [playingGame, setPlayingGame] = useState(false);
   const [input, setInput] = useState('');
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
@@ -109,7 +106,6 @@ export default function TerminalMode() {
 
     setCmdHistory(prev => [...prev, cmd]);
     setHistoryIndex(-1);
-    setShowWelcome(false);
 
   const printProjects = (list: typeof projects, header: string) => {
     const out: string[] = [`  ${header}`, '  ' + DIVIDER];
@@ -226,20 +222,6 @@ export default function TerminalMode() {
         output.push('  > Switching to GUI Mode ...');
         setTimeout(() => switchMode(), 1000);
         break;
-      case 'whoami':
-        output.push('  ' + profile.name.toLowerCase() + ' // ' + profile.title.toLowerCase());
-        output.push('  clearance: LEVEL-5');
-        output.push('  status: ACTIVE');
-        output.push('');
-        break;
-      case 'date':
-        output.push('  ' + new Date().toString());
-        output.push('');
-        break;
-      case 'start':
-        output.push('  ⚠ Use "help" to explore.');
-        output.push('');
-        break;
       default:
         output.push(`  ⚠ Command not found: ${cmd}`);
         output.push('  ▸ Type "help" for available commands.');
@@ -300,9 +282,6 @@ export default function TerminalMode() {
                   <div className="flex justify-center mt-3 mb-3">
                     <pre className="text-[12px] sm:text-sm">{WELCOME_TEXT}</pre>
                   </div>
-                  <div className="flex items-start pl-1 sm:pl-4">
-                    <pre className="text-[12px] sm:text-sm">{COMMANDS_BLOCK}</pre>
-                  </div>
                 </div>
               )}
               {history.map((line: string, i: number) => (
@@ -310,6 +289,10 @@ export default function TerminalMode() {
                   {line}
                 </pre>
               ))}
+            </div>
+
+            <div className="border-t border-white/10 px-3 py-1.5 overflow-y-auto no-scrollbar" style={{ background: 'rgba(10,10,26,0.9)', maxHeight: '38dvh' }}>
+              <pre className="text-[11px] sm:text-xs leading-relaxed whitespace-pre-wrap">{COMMANDS_BLOCK}</pre>
             </div>
 
             <div className="border-t border-white/10 p-3" style={{ background: 'rgba(10,10,26,0.9)' }}>
