@@ -128,16 +128,20 @@ export default function AppWindow({ win, children }: Props) {
         width: win.w,
         height: win.h,
         zIndex: focused ? 200 : 100,
-        background: '#242424',
+        background: focused
+          ? 'linear-gradient(160deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 40%, rgba(120,90,220,0.05) 100%)'
+          : 'linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 40%, rgba(120,90,220,0.04) 100%)',
+        backdropFilter: 'blur(18px) saturate(1.35)',
+        WebkitBackdropFilter: 'blur(18px) saturate(1.35)',
         boxShadow: focused
-          ? '0 25px 50px -12px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08)'
-          : '0 18px 36px -12px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04)',
+          ? '0 25px 50px -12px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.12), inset 0 1px 0 rgba(255,255,255,0.10)'
+          : '0 18px 36px -12px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06)',
       }}
       onMouseDown={() => ctx.focusWindow(win.id)}
     >
       {/* Title bar */}
       <div
-        className="h-10 flex items-center px-3 shrink-0 cursor-default bg-[#303030] relative"
+        className="h-10 flex items-center px-3 shrink-0 cursor-default bg-white/[0.05] border-b border-white/[0.08] relative"
         onMouseDown={startDrag}
         onDoubleClick={onTitleDblClick}
       >

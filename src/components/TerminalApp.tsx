@@ -127,11 +127,11 @@ export default function TerminalApp({ onLaunch }: { onClose: () => void; onLaunc
   return (
     <div
       className="flex flex-col h-full font-mono cursor-text"
-      style={{ background: '#0a0a1a', color: '#4da6ff' }}
+      style={{ background: 'rgba(10,10,26,0.55)', color: '#4da6ff' }}
       onClick={handleClick}
     >
       <div className="flex items-center justify-between px-3 py-2 border-b border-white/10"
-        style={{ background: '#0a0a1a' }}>
+        style={{ background: 'rgba(10,10,26,0.6)' }}>
         <span className="text-[11px]">Terminal v4.0</span>
       </div>
 

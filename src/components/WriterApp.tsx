@@ -13,7 +13,7 @@ const writingSkills = [
 
 export default function WriterApp() {
   return (
-    <div className="flex flex-col h-full bg-[#0a0a14]">
+    <div className="flex flex-col h-full">
       <div className="flex items-center px-5 py-3 border-b border-white/5">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blood/20 to-red-950/30 border border-blood/20 flex items-center justify-center">

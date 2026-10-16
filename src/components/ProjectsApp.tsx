@@ -123,7 +123,7 @@ export default function ProjectsApp(_props: { onClose: () => void }) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0b16]">
+    <div className="flex flex-col h-full">
       {/* Toolbar */}
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/5">
         <button
@@ -252,7 +252,7 @@ function LiveView({ project, onBack }: {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#1e1e1e]">
+    <div className="flex flex-col h-full">
       {/* Browser bar */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-white/5 shrink-0">
         <button
@@ -324,7 +324,7 @@ function ProjectDetail({ project, onBack, openExternal }: {
   openExternal: (url?: string) => void;
 }) {
   return (
-    <div className="flex flex-col h-full bg-[#0b0b16]">
+    <div className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/5">
         <button
           onClick={onBack}

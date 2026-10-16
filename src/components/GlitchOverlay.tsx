@@ -6,10 +6,10 @@ interface GlitchFx {
 }
 
 const INTENSITY = {
-  triggerChance: 0.2,
+  triggerChance: 0.32,
   minInterval: 220,
-  ambientEvery: [20000, 40000] as [number, number],
-  duration: [70, 240] as [number, number],
+  ambientEvery: [30000, 40000] as [number, number],
+  duration: [120, 240] as [number, number],
   pointerEvery: 80,
   pointerChance: 0.2,
 };
