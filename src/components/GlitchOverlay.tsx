@@ -9,7 +9,7 @@ const INTENSITY = {
   triggerChance: 0.12,
   minInterval: 220,
   ambientEvery: [40000, 80000] as [number, number],
-  duration: [70, 240] as [number, number],
+  duration: [40, 120] as [number, number],
   pointerEvery: 120,
   pointerChance: 0.15,
 };
