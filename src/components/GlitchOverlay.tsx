@@ -6,12 +6,12 @@ interface GlitchFx {
 }
 
 const INTENSITY = {
-  triggerChance: 0.12,
+  triggerChance: 0.2,
   minInterval: 220,
-  ambientEvery: [40000, 80000] as [number, number],
+  ambientEvery: [20000, 40000] as [number, number],
   duration: [70, 240] as [number, number],
-  pointerEvery: 120,
-  pointerChance: 0.15,
+  pointerEvery: 80,
+  pointerChance: 0.2,
 };
 
 export default function GlitchOverlay() {
